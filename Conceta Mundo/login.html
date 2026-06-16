@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — Conceta Mundo</title>
+  <meta name="description"
+    content="Acesse sua conta na plataforma Conceta Mundo e conecte-se com a comunidade de intercambistas.">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    body {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .auth-orb-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--teal-500);
+      top: -200px;
+      right: -200px;
+    }
+
+    .auth-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--blue-500);
+      bottom: -100px;
+      left: -100px;
+    }
+
+    .auth-card {
+      background: rgba(14, 18, 36, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-xl);
+      padding: var(--space-10);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg), 0 0 60px rgba(0, 201, 177, 0.08);
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+
+    .auth-logo-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--gradient-teal);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto var(--space-4);
+      box-shadow: var(--shadow-glow-teal);
+    }
+
+    .auth-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: var(--space-2);
+    }
+
+    .auth-subtitle {
+      font-size: 0.875rem;
+      color: var(--gray-400);
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+
+    .auth-divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .auth-divider span {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      white-space: nowrap;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: var(--space-6);
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+
+    .auth-footer a {
+      color: var(--teal-400);
+      font-weight: 600;
+    }
+
+    .demo-users {
+      background: rgba(0, 201, 177, 0.06);
+      border: 1px solid rgba(0, 201, 177, 0.15);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+
+    .demo-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal-400);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-3);
+    }
+
+    .demo-user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border-radius: var(--radius-sm);
+      padding: 6px var(--space-2);
+    }
+
+    .demo-user:last-child {
+      border-bottom: none;
+    }
+
+    .demo-user:hover {
+      background: rgba(0, 201, 177, 0.08);
+    }
+
+    .demo-user-info {
+      font-size: 0.8rem;
+      color: var(--gray-300);
+    }
+
+    .demo-user-role {
+      font-size: 0.72rem;
+      color: var(--gray-500);
+    }
+
+    .demo-user-fill {
+      font-size: 0.72rem;
+      color: var(--teal-400);
+      font-weight: 600;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon .form-input {
+      padding-left: 44px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-400);
+      font-size: 1rem;
+      padding: 0;
+    }
+
+    .back-home {
+      position: fixed;
+      top: var(--space-6);
+      left: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--gray-400);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+      z-index: 10;
+    }
+
+    .back-home:hover {
+      color: var(--teal-400);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="auth-orb auth-orb-1"></div>
+  <div class="auth-orb auth-orb-2"></div>
+
+  <a href="index.html" class="back-home">← Voltar ao início</a>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🌍</div>
+      <h1 class="auth-title">Bem-vindo de volta!</h1>
+      <p class="auth-subtitle">Entre na sua conta para continuar</p>
+    </div>
+
+    <!-- Usuários demo -->
+    <div class="demo-users">
+      <div class="demo-title">👋 Acesso rápido (demo)</div>
+      <div class="demo-user" onclick="fillDemo('ana@exemplo.com','123456')" id="demoAna">
+        <div>
+          <div class="demo-user-info">Ana Beatriz (Egresso · Irlanda)</div>
+          <div class="demo-user-role">ana@exemplo.com</div>
+        </div>
+        <span class="demo-user-fill">Preencher →</span>
+      </div>
+      <div class="demo-user" onclick="fillDemo('pedro@exemplo.com','123456')" id="demoPedro">
+        <div>
+          <div class="demo-user-info">Pedro Alves (Estudante)</div>
+          <div class="demo-user-role">pedro@exemplo.com</div>
+        </div>
+        <span class="demo-user-fill">Preencher →</span>
+      </div>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <div class="input-with-icon">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="email" class="form-input" placeholder="seu@email.com" autocomplete="email" required>
+        </div>
+        <span class="form-error" id="emailError">E-mail inválido.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="senha">Senha</label>
+        <div class="input-with-icon">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="senha" class="form-input" placeholder="Sua senha" autocomplete="current-password"
+            required>
+          <button type="button" class="toggle-password" id="toggleSenha" aria-label="Mostrar senha">👁</button>
+        </div>
+        <span class="form-error" id="senhaError">Senha obrigatória.</span>
+      </div>
+
+      <span class="form-error visible" id="globalError"
+        style="display:none; margin-bottom: var(--space-4); display:block"></span>
+
+      <button type="submit" class="btn btn-primary btn-full" id="btnLogin">
+        <span id="btnLoginText">Entrar</span>
+        <div class="spinner" id="loginSpinner" style="display:none"></div>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Não tem conta? <a href="cadastro.html">Criar conta gratuita</a>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Redireciona se já logado
+    Auth.redirectIfLoggedIn('dashboard.html');
+
+    // Preenche demo
+    function fillDemo(email, senha) {
+      document.getElementById('email').value = email;
+      document.getElementById('senha').value = senha;
+    }
+
+    // Toggle senha
+    document.getElementById('toggleSenha').addEventListener('click', function () {
+      const input = document.getElementById('senha');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      this.textContent = input.type === 'password' ? '👁' : '🙈';
+    });
+
+    // Submit
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+      const globalError = document.getElementById('globalError');
+
+      globalError.style.display = 'none';
+
+      // Validação básica
+      if (!email) { document.getElementById('emailError').classList.add('visible'); return; }
+      if (!senha) { document.getElementById('senhaError').classList.add('visible'); return; }
+
+      // Loading
+      document.getElementById('btnLoginText').style.display = 'none';
+      document.getElementById('loginSpinner').style.display = 'block';
+      document.getElementById('btnLogin').disabled = true;
+
+      setTimeout(() => {
+        const result = Auth.login(email, senha);
+        if (result.ok) {
+          Toast.success('Login realizado com sucesso!');
+          setTimeout(() => window.location.href = 'dashboard.html', 800);
+        } else {
+          globalError.textContent = result.error;
+          globalError.style.display = 'block';
+          document.getElementById('btnLoginText').style.display = 'inline';
+          document.getElementById('loginSpinner').style.display = 'none';
+          document.getElementById('btnLogin').disabled = false;
+        }
+      }, 600);
+    });
+  </script>
+</body>
+
+</html>

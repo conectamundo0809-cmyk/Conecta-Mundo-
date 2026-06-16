@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil — Conceta Mundo</title>
+  <meta name="description" content="Gerencie seu perfil, edite suas informações e conecte-se com a comunidade Conceta Mundo.">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* ── Estilos Exclusivos do Perfil ── */
+    .profile-container {
+      padding-top: 100px;
+      padding-bottom: var(--space-20);
+      min-height: 100vh;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(36,72,212,0.08) 0%, transparent 80%),
+                  radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,201,177,0.05) 0%, transparent 70%);
+    }
+
+    /* Simulador de Papel */
+    .simulator-banner {
+      background: linear-gradient(90deg, rgba(36,72,212,0.15) 0%, rgba(0,201,177,0.15) 100%);
+      border: 1px solid rgba(0,201,177,0.25);
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-6);
+      margin-bottom: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      animation: fadeInDown 0.4s ease;
+    }
+
+    .simulator-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .simulator-badge {
+      background: var(--gradient-teal);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    /* Perfil Header Card */
+    .profile-header-card {
+      background: rgba(14, 18, 36, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0,201,177,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .profile-header-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .profile-avatar-wrapper {
+      position: relative;
+    }
+
+    .profile-avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--teal-500);
+      box-shadow: var(--shadow-glow-teal);
+      object-fit: cover;
+      font-size: 2.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-teal);
+      color: var(--white);
+    }
+
+    .profile-avatar-edit-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--gray-800);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--white);
+      transition: all var(--transition-fast);
+    }
+
+    .profile-avatar-edit-btn:hover {
+      background: var(--teal-500);
+      border-color: var(--teal-500);
+      transform: scale(1.1);
+    }
+
+    .profile-info-block {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .profile-name-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .profile-role-badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+    }
+
+    .profile-details-row {
+      display: flex;
+      gap: var(--space-6);
+      margin-bottom: var(--space-4);
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: var(--gray-400);
+    }
+
+    .profile-detail-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .profile-languages-box {
+      margin-top: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .language-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .language-badge.learning {
+      border-color: rgba(245,158,11,0.3);
+      background: rgba(245,158,11,0.06);
+      color: var(--amber-300);
+    }
+
+    .profile-bio {
+      font-size: 0.95rem;
+      color: var(--gray-300);
+      max-width: 700px;
+      line-height: 1.6;
+      margin-top: var(--space-4);
+    }
+
+    /* Layout do Conteúdo Principal */
+    .profile-main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-8);
+    }
+
+    @media (max-width: 992px) {
+      .profile-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards de Conexão */
+    .connection-panel {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(14, 18, 36, 0.5);
+      backdrop-filter: blur(10px);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .connection-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: var(--space-4);
+    }
+
+    .connection-panel-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* Lista de Solicitações */
+    .requests-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .request-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      transition: all var(--transition-base);
+    }
+
+    .request-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 201, 177, 0.2);
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-3);
+    }
+
+    .request-sender {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .request-sender-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .request-sender-meta {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    .request-msg {
+      font-size: 0.85rem;
+      color: var(--gray-300);
+      background: rgba(6, 8, 20, 0.4);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      border-left: 2px solid var(--teal-500);
+      line-height: 1.5;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    /* Toggle Switches */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-300);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--gray-700);
+      transition: .4s;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--white);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: var(--gradient-teal);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Active Connections Grid */
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .connection-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      transition: all var(--transition-base);
+    }
+
+    .connection-card:hover {
+      border-color: rgba(0, 201, 177, 0.2);
+      background: rgba(0, 201, 177, 0.03);
+      transform: translateY(-2px);
+    }
+
+    .connection-user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .connection-user-details h5 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .connection-user-details p {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+
+    .connection-chat-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all var(--transition-fast);
+    }
+
+    .connection-chat-btn:hover {
+      background: var(--gradient-teal);
+      border-color: var(--teal-500);
+      transform: scale(1.08);
+    }
+
+    /* Relatos Card */
+    .profile-stories-panel {
+      margin-top: var(--space-8);
+    }
+
+    /* Modal / Form de Edição */
+    .edit-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .edit-modal.open {
+      display: flex;
+    }
+
+    .edit-modal-content {
+      background: var(--gray-900);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg), 0 0 50px rgba(0,201,177,0.05);
+      position: relative;
+    }
+
+    .edit-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+
+    .edit-modal-close {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .edit-modal-close:hover {
+      color: var(--white);
+    }
+
+    /* Buscador de Mentores (Para estudantes) */
+    .mentor-finder-box {
+      margin-bottom: var(--space-6);
+    }
+
+    .search-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: var(--space-3);
+    }
+
+    @media (max-width: 600px) {
+      .search-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mentor-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+      transition: all var(--transition-base);
+    }
+
+    .mentor-card:hover {
+      border-color: rgba(0, 201, 177, 0.25);
+      background: rgba(0, 201, 177, 0.02);
+      transform: translateY(-2px);
+    }
+
+    .mentor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-3);
+    }
+
+    .mentor-details-meta {
+      display: flex;
+      gap: var(--space-3);
+      font-size: 0.78rem;
+      color: var(--teal-400);
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .mentor-bio {
+      font-size: 0.85rem;
+      color: var(--gray-300);
+      margin-bottom: var(--space-4);
+      line-height: 1.5;
+    }
+
+    /* Chat Drawer/Panel */
+    .chat-drawer {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      width: 360px;
+      height: 480px;
+      background: var(--gray-900);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), var(--shadow-glow-blue);
+      display: none;
+      flex-direction: column;
+      z-index: 1500;
+      overflow: hidden;
+      animation: fadeInDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .chat-drawer.open {
+      display: flex;
+    }
+
+    .chat-header {
+      background: var(--gradient-teal);
+      padding: var(--space-4);
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: var(--space-4);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      background: rgba(6, 8, 20, 0.6);
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .chat-bubble.sent {
+      background: var(--blue-600);
+      color: var(--white);
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-bubble.received {
+      background: rgba(255,255,255,0.06);
+      color: var(--gray-200);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .chat-footer {
+      padding: var(--space-3);
+      background: var(--gray-800);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-full);
+      padding: 8px 14px;
+      color: var(--white);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--teal-400);
+    }
+
+    .chat-send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-teal);
+      border: none;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* Sidebar de Badges/Conquistas */
+    .profile-stats-card {
+      background: rgba(14, 18, 36, 0.7);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    .conquistas-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+
+    .conquista-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+    }
+
+    .conquista-badge {
+      font-size: 1.5rem;
+    }
+
+    .conquista-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .conquista-desc {
+      font-size: 0.72rem;
+      color: var(--gray-400);
+    }
+
+    /* Configuração Checkbox Checkboxes List */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🌍</div>
+      <span class="nav-logo-text">Conceta<span>Mundo</span></span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="explorar.html">Explorar</a></li>
+      <li><a href="forum.html">Fórum</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Estado: visitante -->
+      <div id="navGuestBtns" class="flex gap-3">
+        <a href="login.html" class="btn btn-ghost btn-sm" id="btnNavLogin">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm" id="btnNavCadastro">Cadastrar</a>
+      </div>
+
+      <!-- Estado: logado -->
+      <div id="navUserArea" class="dropdown" style="display:none">
+        <button class="nav-avatar-btn" id="navAvatarBtn">
+          <div class="avatar-placeholder avatar-sm" id="navAvatarEl" style="font-size:0.7rem">?</div>
+          <span id="navUserName">Usuário</span>
+          <span>▾</span>
+        </button>
+        <div class="dropdown-menu" id="navDropdown">
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="perfil.html" class="dropdown-item">👤 Meu Perfil</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" id="logoutBtn">🚪 Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Seção Perfil ── -->
+<div class="profile-container">
+  <div class="container">
+    
+    <!-- ── BORDER DE CONTROLE DO SIMULADOR (Para testes e correções) ── -->
+    <div class="simulator-banner" id="simBanner">
+      <div class="simulator-info">
+        <span class="simulator-badge">Simulador Conceta</span>
+        <p style="font-size: 0.88rem; color: var(--gray-200)">
+          Você está visualizando a interface gráfica do perfil de 
+          <strong id="simRoleLabel" class="text-gradient">Egresso</strong>.
+        </p>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="btnSwitchSim" onclick="toggleSimulatedRole()">
+        🔁 Alternar Perfil
+      </button>
+    </div>
+
+    <!-- ── CARD PRINCIPAL DO PERFIL (PARTE SUPERIOR) ── -->
+    <header class="profile-header-card" id="profileHeader">
+      <div class="profile-header-content">
+        
+        <div class="profile-avatar-wrapper">
+          <div class="profile-avatar-large" id="profileAvatar">AB</div>
+          <button class="profile-avatar-edit-btn" onclick="openEditModal()" aria-label="Editar Foto">✏️</button>
+        </div>
+
+        <div class="profile-info-block">
+          <div class="profile-name-row">
+            <h1 style="font-size: 2.2rem; font-weight: 900; line-height: 1" id="profileName">Ana Beatriz Santos</h1>
+            <span class="badge profile-role-badge" id="profileRoleBadge" style="background: rgba(0, 201, 177, 0.15); color: var(--teal-400); border: 1px solid rgba(0, 201, 177, 0.3)">
+              Egresso
+            </span>
+          </div>
+
+          <div class="profile-details-row">
+            <div class="profile-detail-item" id="detailsDestiny">
+              <span>✈️</span>
+              <span id="txtDestino">Irlanda (Dublin) · 2023</span>
+            </div>
+            <div class="profile-detail-item">
+              <span>📅</span>
+              <span id="txtMembroDesde">Membro desde Janeiro de 2024</span>
+            </div>
+          </div>
+
+          <!-- Idiomas falados/estudados (Nome Idioma solicitado na parte superior) -->
+          <div class="profile-languages-box">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--gray-400); display: flex; align-items: center; gap: 4px;">
+              🗣️ Idiomas:
+            </span>
+            <div id="languagesList" style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+              <span class="language-badge">🇮🇪 Inglês (Fluente)</span>
+              <span class="language-badge">🇪🇸 Espanhol (Intermediário)</span>
+            </div>
+          </div>
+
+          <p class="profile-bio" id="profileBio">
+            Passei 10 meses em Dublin estudando inglês e descobri uma paixão por culturas diferentes. Adoro compartilhar dicas sobre a família anfitriã e a vida na Irlanda!
+          </p>
+        </div>
+
+        <div style="align-self: flex-start;">
+          <button class="btn btn-secondary btn-sm" onclick="openEditModal()">
+            ⚙️ Editar Perfil
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ── GRID DO CONTEÚDO PRINCIPAL (PARTE INFERIOR) ── -->
+    <div class="profile-main-grid">
+      
+      <!-- COLUNA ESQUERDA (DADOS DINÂMICOS CONEXÕES / RELATOS / INTERESSES) -->
+      <main class="profile-left-column">
+        
+        <!-- ==============================================
+             PROGRAMA DE CONEXÃO (Solicitado no prompt)
+             ============================================== -->
+        <section class="connection-panel" id="connectionProgramSection">
+          
+          <div class="connection-panel-header">
+            <h2 class="connection-panel-title">
+              <span id="connIcon">🤝</span>
+              <span id="connTitle">Programa de Conexão</span>
+            </h2>
+            
+            <!-- Apenas para Egressos: Toggle de Disponibilidade -->
+            <div class="switch-container" id="mentorAvailabilityToggle">
+              <span>Disponível para Mentoria</span>
+              <label class="switch">
+                <input type="checkbox" id="chkAvailability" checked onchange="toggleMentorAvailability()">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- CONTAINER DA CONEXÃO - EGRESSO -->
+          <div id="connContainerEgresso">
+            <p style="font-size: 0.9rem; color: var(--gray-300); margin-bottom: var(--space-6);">
+              O <strong>Programa de Conexão</strong> conecta você a futuros intercambistas que sonham em ir para o seu país de destino. Ajude-os tirando dúvidas ou revisando inscrições!
+            </p>
+
+            <!-- Solicitações Recebidas -->
+            <h3 class="mb-4 text-gradient" style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+              📥 Solicitações de Conexão Recebidas 
+              <span class="badge badge-amber" id="reqCountBadge" style="font-size:0.65rem">1</span>
+            </h3>
+            
+            <div class="requests-list" id="requestsListContainer">
+              <!-- Renderizado dinamicamente -->
+            </div>
+
+            <!-- Conexões Ativas -->
+            <h3 class="mb-4 text-gradient" style="font-size: 1.1rem; margin-top: var(--space-8);">
+              👥 Meus Estudantes Conectados (Mentees)
+            </h3>
+            
+            <div class="connections-grid" id="connectionsGridContainer">
+              <!-- Renderizado dinamicamente -->
+            </div>
+          </div>
+
+          <!-- CONTAINER DA CONEXÃO - ESTUDANTE -->
+          <div id="connContainerEstudante" style="display:none;">
+            <p style="font-size: 0.9rem; color: var(--gray-300); margin-bottom: var(--space-6);">
+              Use o <strong>Programa de Conexão</strong> para solicitar ajuda a egressos experientes que viajaram para o seu país de interesse.
+            </p>
+
+            <!-- Buscador de Mentores -->
+            <div class="mentor-finder-box card">
+              <h4 class="mb-3" style="font-size: 1rem; color: var(--white)">🔍 Encontre um Mentor Egresso</h4>
+              <div class="search-inputs">
+                <select id="searchPais" class="form-select form-input">
+                  <option value="">Todos os Países</option>
+                  <option value="Irlanda">Irlanda 🇮🇪</option>
+                  <option value="Canadá">Canadá 🇨🇦</option>
+                  <option value="Portugal">Portugal 🇵🇹</option>
+                </select>
+                <input type="text" id="searchKeyword" class="form-input" placeholder="Idioma ou palavra-chave (Ex: Inglês)">
+                <button class="btn btn-primary btn-sm" onclick="filterMentors()">Buscar</button>
+              </div>
+            </div>
+
+            <!-- Lista de Mentores Disponíveis -->
+            <h3 class="mb-4 text-gradient" style="font-size: 1.1rem;">
+              ✈️ Egressos recomendados para você
+            </h3>
+            
+            <div class="mentors-search-results" id="mentorsListContainer">
+              <!-- Renderizado dinamicamente -->
+            </div>
+
+            <!-- Minhas Conexões Ativas -->
+            <h3 class="mb-4 text-gradient" style="font-size: 1.1rem; margin-top: var(--space-8);">
+              🤝 Meus Mentores Conectados
+            </h3>
+            
+            <div class="connections-grid" id="studentConnectionsGrid">
+              <!-- Renderizado dinamicamente -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- SEÇÃO: MEUS RELATOS OU MINHAS DÚVIDAS -->
+        <section class="profile-stories-panel" id="userContentSection">
+          <div class="flex justify-between items-center mb-6">
+            <h2 id="contentSectionTitle" style="font-size: 1.3rem; font-weight: 800;">📖 Meus Relatos Escritos</h2>
+            <button class="btn btn-primary btn-sm" id="btnContentAction" onclick="alert('Funcionalidade simulada: Criação de novo relato!')">
+              ✍️ Escrever Relato
+            </button>
+          </div>
+          <div class="grid-2" id="userContentGrid">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </section>
+
+      </main>
+
+      <!-- COLUNA DIREITA (CONQUISTAS E ESTATÍSTICAS) -->
+      <aside class="profile-right-column">
+        
+        <!-- CARD ESTATÍSTICAS -->
+        <div class="profile-stats-card">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-4);" class="text-gradient">
+            📈 Estatísticas
+          </h3>
+          <div class="flex flex-col gap-4">
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.85rem; color: var(--gray-400);" id="statLabel1">Relatos Publicados</span>
+              <strong style="color: var(--white)" id="statVal1">1</strong>
+            </div>
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.85rem; color: var(--gray-400);" id="statLabel2">Mentores Conectados</span>
+              <strong style="color: var(--white)" id="statVal2">2</strong>
+            </div>
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.85rem; color: var(--gray-400);">Visualizações no Fórum</span>
+              <strong style="color: var(--white)">142</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD CONQUISTAS / BADGES -->
+        <div class="profile-stats-card">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-4);" class="text-gradient-amber">
+            🏆 Conquistas
+          </h3>
+          <div class="conquistas-list" id="conquistasContainer">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ── MODAL DE EDIÇÃO DO PERFIL ── -->
+<div class="edit-modal" id="editModal" onclick="closeEditModalOnOverlay(event)">
+  <div class="edit-modal-content">
+    <div class="edit-modal-header">
+      <h3 style="font-size: 1.3rem;" class="text-gradient">⚙️ Editar Informações</h3>
+      <button class="edit-modal-close" onclick="closeEditModal()">×</button>
+    </div>
+
+    <form id="editProfileForm" onsubmit="saveProfileEdits(event)">
+      <div class="form-group">
+        <label class="form-label" for="editNome">Nome Completo</label>
+        <input type="text" id="editNome" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="editBio">Biografia / Sobre mim</label>
+        <textarea id="editBio" class="form-textarea" required></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="editPais">País de Destino/Interesse</label>
+          <select id="editPais" class="form-select form-input">
+            <option value="Irlanda">Irlanda 🇮🇪</option>
+            <option value="Canadá">Canadá 🇨🇦</option>
+            <option value="Portugal">Portugal 🇵🇹</option>
+            <option value="Alemanha">Alemanha 🇩🇪</option>
+            <option value="França">França 🇫🇷</option>
+            <option value="Espanha">Espanha 🇪🇸</option>
+          </select>
+        </div>
+        <div class="form-group" id="editAnoGroup">
+          <label class="form-label" for="editAno">Ano do Intercâmbio</label>
+          <input type="number" id="editAno" class="form-input" min="2010" max="2030">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Idiomas Fluentes/Estudados (Marque todos)</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="editLanguages" value="🇬🇧 Inglês"> 🇬🇧 Inglês</label>
+          <label class="checkbox-item"><input type="checkbox" name="editLanguages" value="🇪🇸 Espanhol"> 🇪🇸 Espanhol</label>
+          <label class="checkbox-item"><input type="checkbox" name="editLanguages" value="🇫🇷 Francês"> 🇫🇷 Francês</label>
+          <label class="checkbox-item"><input type="checkbox" name="editLanguages" value="🇩🇪 Alemão"> 🇩🇪 Alemão</label>
+          <label class="checkbox-item"><input type="checkbox" name="editLanguages" value="🇵🇹 Português"> 🇵🇹 Português</label>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--space-3); margin-top: var(--space-6); justify-content: flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeEditModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary btn-sm">Salvar Alterações</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── GAVETA DE CHAT (PROGRAMA DE CONEXÃO) ── -->
+<div class="chat-drawer" id="chatDrawer">
+  <div class="chat-header">
+    <div class="chat-header-title">
+      <span id="chatAvatarPlaceholder">👤</span>
+      <span id="chatTargetName">Lucas Mendes</span>
+    </div>
+    <button style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;" onclick="closeChat()">×</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <!-- Mensagens renderizadas dinamicamente -->
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chatInput" class="chat-input" placeholder="Digite uma mensagem..." onkeydown="handleChatKeydown(event)">
+    <button class="chat-send-btn" onclick="sendChatMessage()">➔</button>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:0">
+      <p>© 2025 Conceta Mundo · Conectando Experiências e Estudantes</p>
+      <p>Feito com ❤️ para transformar vidas</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // ── ESTADO DOS DADOS SIMULADOS DO PROGRAMA DE CONEXÃO ──
+  // Salva no localStorage para manter a interação persistente
+  const CONN_REQ_KEY = 'cm_conn_requests';
+  const CONN_ACTIVE_KEY = 'cm_conn_actives';
+  
+  const SEED_CONN_REQUESTS = [
+    {
+      id: 'req_1',
+      studentId: 'u4', // Pedro Alves (estudante)
+      studentName: 'Pedro Alves',
+      studentInitials: 'PA',
+      mentorId: 'u1', // Ana Beatriz (egresso)
+      mensagem: 'Oi Ana! Vi seu relato sobre Dublin e adorei. Quero me candidatar a um intercâmbio esse ano para ir para a Irlanda. Poderíamos conversar para você me dar umas dicas de como passar na seleção?',
+      data: '2026-06-01'
+    },
+    {
+      id: 'req_2',
+      studentId: 'u4', // Pedro Alves
+      studentName: 'Pedro Alves',
+      studentInitials: 'PA',
+      mentorId: 'u2', // Carlos Eduardo
+      mensagem: 'Olá Carlos! Estou em dúvida se escolho Canadá ou Irlanda. Como foi sua adaptação ao frio de Toronto?',
+      data: '2026-06-02'
+    }
+  ];
+
+  const SEED_ACTIVE_CONNECTIONS = [
+    {
+      id: 'active_1',
+      mentorId: 'u1',
+      studentId: 'stub_1',
+      studentName: 'Gabriela Dias',
+      studentInitials: 'GD',
+      mentorName: 'Ana Beatriz Santos',
+      paisInteresse: 'Irlanda',
+      mensagens: [
+        { sender: 'student', texto: 'Oi Ana, obrigada por aceitar minha solicitação! Estou estudando bastante.', data: '2026-06-01T10:00:00' },
+        { sender: 'mentor', texto: 'Que ótimo Gabriela! Fico muito feliz em ajudar. Qual sua maior dúvida hoje?', data: '2026-06-01T10:05:00' }
+      ]
+    },
+    {
+      id: 'active_2',
+      mentorId: 'u2', // Carlos
+      studentId: 'stub_2',
+      studentName: 'Lucas Mendes',
+      studentInitials: 'LM',
+      mentorName: 'Carlos Eduardo Lima',
+      paisInteresse: 'Canadá',
+      mensagens: [
+        { sender: 'student', texto: 'Olá Carlos! O futebol escolar no Canadá é muito competitivo?', data: '2026-05-30T15:00:00' }
+      ]
+    },
+    {
+      id: 'active_3',
+      mentorId: 'u3', // Mariana
+      studentId: 'u4', // Pedro Alves
+      studentName: 'Pedro Alves',
+      studentInitials: 'PA',
+      mentorName: 'Mariana Oliveira',
+      paisInteresse: 'Portugal',
+      mensagens: [
+        { sender: 'student', texto: 'Oi Mariana, como funciona a prova de sotaque em Lisboa?', data: '2026-06-01T11:00:00' }
+      ]
+    }
+  ];
+
+  function getLocalRequests() {
+    if (!localStorage.getItem(CONN_REQ_KEY)) {
+      localStorage.setItem(CONN_REQ_KEY, JSON.stringify(SEED_CONN_REQUESTS));
+    }
+    return JSON.parse(localStorage.getItem(CONN_REQ_KEY));
+  }
+
+  function saveLocalRequests(reqs) {
+    localStorage.setItem(CONN_REQ_KEY, JSON.stringify(reqs));
+  }
+
+  function getLocalConnections() {
+    if (!localStorage.getItem(CONN_ACTIVE_KEY)) {
+      localStorage.setItem(CONN_ACTIVE_KEY, JSON.stringify(SEED_ACTIVE_CONNECTIONS));
+    }
+    return JSON.parse(localStorage.getItem(CONN_ACTIVE_KEY));
+  }
+
+  function saveLocalConnections(conns) {
+    localStorage.setItem(CONN_ACTIVE_KEY, JSON.stringify(conns));
+  }
+
+  // ── INICIALIZAÇÃO DA PÁGINA ──
+  let currentUser = null;
+  let simulatedRole = 'egresso'; // 'egresso' ou 'estudante'
+  let currentActiveChatId = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Carrega usuário atual
+    currentUser = Auth.getCurrentUser();
+    
+    // Se não houver ninguém logado, faz login automático com Ana Beatriz (u1)
+    if (!currentUser) {
+      const dbUsers = Auth.getUsers();
+      const anaUser = dbUsers.find(u => u.id === 'u1') || dbUsers[0];
+      if (anaUser) {
+        localStorage.setItem('cm_session', JSON.stringify({ userId: anaUser.id }));
+        currentUser = anaUser;
+        // Recarrega navbar
+        Navbar.updateUserUI();
+      }
+    }
+
+    // Define o papel simulado padrão baseado no papel do usuário
+    if (currentUser) {
+      simulatedRole = currentUser.papel || 'egresso';
+    }
+
+    // Verifica se há parâmetros de ID na URL para conectar direto (integração Fórum/FAQ -> Perfil)
+    const connectWithId = UI.getParam('connectWith');
+    if (connectWithId) {
+      // Força o papel a ser estudante para poder solicitar conexão
+      simulatedRole = 'estudante';
+      if (currentUser) {
+        currentUser.papel = 'estudante';
+        Auth.updateUser({ papel: 'estudante' });
+      }
+      
+      // Inicializa a interface
+      renderProfileView();
+
+      // Solicita a conexão automaticamente se o mentor for válido
+      const allUsers = Auth.getUsers();
+      const targetMentor = allUsers.find(u => u.id === connectWithId && u.papel === 'egresso');
+      if (targetMentor) {
+        const conns = getLocalConnections().filter(c => c.studentId === currentUser.id);
+        const reqs = getLocalRequests().filter(r => r.studentId === currentUser.id);
+        const isConnected = conns.some(c => c.mentorId === targetMentor.id);
+        const isPending = reqs.some(r => r.mentorId === targetMentor.id);
+
+        if (isConnected) {
+          Toast.info(`Você já está conectado com ${targetMentor.nome}!`);
+          const existingConn = conns.find(c => c.mentorId === targetMentor.id);
+          openChat(existingConn.id);
+        } else if (isPending) {
+          Toast.info(`Sua solicitação de conexão para ${targetMentor.nome} está pendente.`);
+        } else {
+          requestConnection(targetMentor.id, targetMentor.nome);
+        }
+      }
+    } else {
+      // Inicializa a interface normalmente
+      renderProfileView();
+    }
+  });
+
+  // Alterna o papel simulado (para permitir testar as duas interfaces como pedido)
+  function toggleSimulatedRole() {
+    simulatedRole = simulatedRole === 'egresso' ? 'estudante' : 'egresso';
+    
+    // Altera temporariamente no banco fake local para os testes funcionarem com o usuário logado
+    if (currentUser) {
+      currentUser.papel = simulatedRole;
+      Auth.updateUser({ papel: simulatedRole });
+    }
+
+    renderProfileView();
+    Toast.info(`Simulando perfil como: ${simulatedRole === 'egresso' ? 'Egresso ✈️' : 'Futuro Intercambista 🎒'}`);
+  }
+
+  // ── RENDERIZAÇÃO DA INTERFACE DO PERFIL ──
+  function renderProfileView() {
+    if (!currentUser) return;
+
+    // Atualiza simulador banner
+    const simRoleLabel = document.getElementById('simRoleLabel');
+    simRoleLabel.textContent = simulatedRole === 'egresso' ? 'Egresso' : 'Futuro Intercambista';
+
+    // Atualiza Elementos Superiores do Perfil
+    const profileName = document.getElementById('profileName');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileRoleBadge = document.getElementById('profileRoleBadge');
+    const txtDestino = document.getElementById('txtDestino');
+    const profileBio = document.getElementById('profileBio');
+    const languagesList = document.getElementById('languagesList');
+
+    profileName.textContent = currentUser.nome;
+    profileAvatar.textContent = currentUser.iniciais;
+
+    // Se o usuário não tiver idiomas listados no banco, colocamos valores padrão
+    let userLanguages = currentUser.idiomas;
+    if (!userLanguages || userLanguages.length === 0) {
+      userLanguages = simulatedRole === 'egresso' 
+        ? (currentUser.id === 'u3' ? ['🇵🇹 Português'] : ['🇬🇧 Inglês'])
+        : ['🇬🇧 Inglês (Em aprendizado)'];
+    }
+
+    languagesList.innerHTML = userLanguages.map(l => `<span class="language-badge">${l}</span>`).join('');
+
+    if (simulatedRole === 'egresso') {
+      profileRoleBadge.textContent = 'Egresso';
+      profileRoleBadge.style.background = 'rgba(0, 201, 177, 0.15)';
+      profileRoleBadge.style.color = 'var(--teal-400)';
+      profileRoleBadge.style.borderColor = 'rgba(0, 201, 177, 0.3)';
+      
+      const userPais = currentUser.pais || 'Irlanda';
+      const userCidade = currentUser.cidade || 'Dublin';
+      const userAno = currentUser.ano || 2023;
+      txtDestino.textContent = `${userPais} (${userCidade}) · ${userAno}`;
+      document.getElementById('detailsDestiny').style.display = 'flex';
+
+      profileBio.textContent = currentUser.bio || 'Intercâmbio mudou minha perspectiva de vida. Estou no Conceta Mundo para ajudar novos candidatos a decolarem!';
+      
+      // Conexão Program Títulos
+      document.getElementById('connIcon').textContent = '✈️';
+      document.getElementById('connTitle').textContent = 'Programa de Conexão: Mentoria';
+      document.getElementById('mentorAvailabilityToggle').style.display = 'flex';
+      
+      // Mostra containers corretos
+      document.getElementById('connContainerEgresso').style.display = 'block';
+      document.getElementById('connContainerEstudante').style.display = 'none';
+
+      // Esquerda inferior - Relatos
+      document.getElementById('contentSectionTitle').textContent = '📖 Meus Relatos Publicados';
+      document.getElementById('btnContentAction').style.display = 'inline-flex';
+      document.getElementById('btnContentAction').textContent = '✍️ Escrever Relato';
+
+      // Estatísticas
+      document.getElementById('statLabel1').textContent = 'Relatos Publicados';
+      document.getElementById('statLabel2').textContent = 'Estudantes Conectados';
+      
+      renderEgressoConnections();
+      renderEgressoStories();
+      renderConquistas('egresso');
+
+    } else {
+      profileRoleBadge.textContent = 'Estudante';
+      profileRoleBadge.style.background = 'rgba(36, 72, 212, 0.2)';
+      profileRoleBadge.style.color = 'var(--blue-300)';
+      profileRoleBadge.style.borderColor = 'rgba(36, 72, 212, 0.4)';
+      
+      document.getElementById('detailsDestiny').style.display = 'none';
+      profileBio.textContent = currentUser.bio || 'Estudante do ensino médio focado em conseguir uma bolsa de intercâmbio!';
+
+      // Conexão Program Títulos
+      document.getElementById('connIcon').textContent = '🎒';
+      document.getElementById('connTitle').textContent = 'Programa de Conexão: Encontre um Mentor';
+      document.getElementById('mentorAvailabilityToggle').style.display = 'none';
+
+      // Mostra containers corretos
+      document.getElementById('connContainerEgresso').style.display = 'none';
+      document.getElementById('connContainerEstudante').style.display = 'block';
+
+      // Esquerda inferior - Dúvidas
+      document.getElementById('contentSectionTitle').textContent = '❓ Minhas Dúvidas no Fórum';
+      document.getElementById('btnContentAction').style.display = 'inline-flex';
+      document.getElementById('btnContentAction').textContent = '❓ Fazer Pergunta';
+
+      // Estatísticas
+      document.getElementById('statLabel1').textContent = 'Dúvidas Enviadas';
+      document.getElementById('statLabel2').textContent = 'Mentores Conectados';
+
+      renderEstudanteConnections();
+      filterMentors(); // Carrega mentores recomendados
+      renderEstudanteForumQuestions();
+      renderConquistas('estudante');
+    }
+  }
+
+  // ── RENDERIZAÇÕES ESPECÍFICAS DE EGRESSO ──
+  function renderEgressoConnections() {
+    const reqs = getLocalRequests().filter(r => r.mentorId === currentUser.id);
+    const conns = getLocalConnections().filter(c => c.mentorId === currentUser.id);
+
+    // Contagem de solicitações pendentes
+    document.getElementById('reqCountBadge').textContent = reqs.length;
+    document.getElementById('reqCountBadge').style.display = reqs.length > 0 ? 'inline-flex' : 'none';
+
+    // Lista de Solicitações
+    const requestsListContainer = document.getElementById('requestsListContainer');
+    if (reqs.length === 0) {
+      requestsListContainer.innerHTML = `
+        <div class="empty-state" style="padding: var(--space-4) 0;">
+          <p style="font-size:0.85rem;color:var(--gray-500)">Nenhuma solicitação pendente no momento.</p>
+        </div>
+      `;
+    } else {
+      requestsListContainer.innerHTML = reqs.map(r => `
+        <div class="request-card" id="req_${r.id}">
+          <div class="request-header">
+            <div class="request-sender">
+              <div class="avatar-placeholder avatar-sm">${r.studentInitials}</div>
+              <div>
+                <div class="request-sender-name">${r.studentName}</div>
+                <div class="request-sender-meta">Estudante de Ensino Médio · Solicitou conexão</div>
+              </div>
+            </div>
+            <span style="font-size:0.75rem; color:var(--gray-500)">${r.data}</span>
+          </div>
+          <p class="request-msg">"${r.mensagem}"</p>
+          <div class="request-actions">
+            <button class="btn btn-primary btn-sm" onclick="acceptRequest('${r.id}')">Aceitar Conexão</button>
+            <button class="btn btn-ghost btn-sm" onclick="declineRequest('${r.id}')">Recusar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Grid de Conexões Ativas
+    const connectionsGridContainer = document.getElementById('connectionsGridContainer');
+    if (conns.length === 0) {
+      connectionsGridContainer.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: var(--space-4) 0;">
+          <p style="font-size:0.85rem;color:var(--gray-500)">Você ainda não tem conexões ativas.</p>
+        </div>
+      `;
+    } else {
+      connectionsGridContainer.innerHTML = conns.map(c => `
+        <div class="connection-card">
+          <div class="connection-user-info">
+            <div class="avatar-placeholder avatar-sm">${c.studentInitials}</div>
+            <div class="connection-user-details">
+              <h5>${c.studentName}</h5>
+              <p>Foco: ${c.paisInteresse}</p>
+            </div>
+          </div>
+          <button class="connection-chat-btn" onclick="openChat('${c.id}')" title="Conversar">💬</button>
+        </div>
+      `).join('');
+    }
+
+    // Atualiza número na estatística
+    document.getElementById('statVal2').textContent = conns.length;
+  }
+
+  function renderEgressoStories() {
+    const stories = DB.Stories.getByAutor(currentUser.id);
+    const grid = document.getElementById('userContentGrid');
+    
+    document.getElementById('statVal1').textContent = stories.length;
+
+    if (stories.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <div class="empty-state-icon">📖</div>
+          <p>Você ainda não publicou nenhum relato.</p>
+          <button class="btn btn-secondary btn-sm mt-4" onclick="alert('Simulação: Criar Relato')">Escrever Primeiro Relato</button>
+        </div>
+      `;
+    } else {
+      grid.innerHTML = stories.map(s => `
+        <div class="card story-card" style="cursor:pointer;" onclick="window.location.href='relato.html?id=${s.id}'">
+          <h4 style="font-size: 0.95rem; margin-bottom: var(--space-2);">${s.titulo}</h4>
+          <p style="font-size: 0.8rem; color:var(--gray-400); margin-bottom: var(--space-3);">${s.resumo}</p>
+          <div class="flex justify-between items-center" style="font-size: 0.75rem; color:var(--gray-500);">
+            <span>👁 ${s.visualizacoes} views</span>
+            <span>❤️ ${s.curtidas.length} curtidas</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // ── RENDERIZAÇÕES ESPECÍFICAS DE ESTUDANTE ──
+  function renderEstudanteConnections() {
+    const conns = getLocalConnections().filter(c => c.studentId === currentUser.id);
+    const grid = document.getElementById('studentConnectionsGrid');
+
+    if (conns.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1; padding: var(--space-4) 0;">
+          <p style="font-size:0.85rem;color:var(--gray-500)">Nenhum mentor conectado no momento. Procure egressos na lista abaixo!</p>
+        </div>
+      `;
+    } else {
+      grid.innerHTML = conns.map(c => `
+        <div class="connection-card">
+          <div class="connection-user-info">
+            <div class="avatar-placeholder avatar-sm">${c.mentorName.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+            <div class="connection-user-details">
+              <h5>${c.mentorName}</h5>
+              <p>Mentor · Destino: ${c.paisInteresse}</p>
+            </div>
+          </div>
+          <button class="connection-chat-btn" onclick="openChat('${c.id}')" title="Conversar">💬</button>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('statVal2').textContent = conns.length;
+  }
+
+  function filterMentors() {
+    if (simulatedRole !== 'estudante') return;
+
+    const pais = document.getElementById('searchPais').value;
+    const keyword = document.getElementById('searchKeyword').value.toLowerCase();
+
+    // Filtra egressos do banco geral de usuários (que não sejam o próprio usuário)
+    const allUsers = Auth.getUsers();
+    const mentors = allUsers.filter(u => u.papel === 'egresso' && u.id !== currentUser.id);
+
+    const filtered = mentors.filter(m => {
+      const matchPais = !pais || m.pais === pais;
+      const mBio = (m.bio || '').toLowerCase();
+      const mNome = m.nome.toLowerCase();
+      const matchKeyword = !keyword || mBio.includes(keyword) || mNome.includes(keyword) || (m.pais || '').toLowerCase().includes(keyword);
+      return matchPais && matchKeyword;
+    });
+
+    const conns = getLocalConnections().filter(c => c.studentId === currentUser.id);
+    const reqs = getLocalRequests().filter(r => r.studentId === currentUser.id);
+
+    const container = document.getElementById('mentorsListContainer');
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state" style="padding: var(--space-4) 0;">
+          <p style="font-size:0.85rem;color:var(--gray-500)">Nenhum egresso encontrado com estes filtros.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(m => {
+      // Verifica se já está conectado
+      const isConnected = conns.some(c => c.mentorId === m.id);
+      // Verifica se tem solicitação pendente
+      const isPending = reqs.some(r => r.mentorId === m.id);
+
+      let actionBtn = '';
+      if (isConnected) {
+        actionBtn = `<span class="badge badge-teal">Conectado</span>`;
+      } else if (isPending) {
+        actionBtn = `<span class="badge badge-amber">Pendente ⏳</span>`;
+      } else {
+        actionBtn = `<button class="btn btn-ghost btn-sm" onclick="requestConnection('${m.id}', '${m.nome}')">Solicitar Conexão</button>`;
+      }
+
+      return `
+        <div class="mentor-card">
+          <div class="mentor-header">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <div class="avatar-placeholder avatar-sm">${m.iniciais}</div>
+              <div>
+                <h4 style="font-size:0.95rem; font-weight:700; color:var(--white);">${m.nome}</h4>
+                <div class="mentor-details-meta">
+                  <span>✈️ ${m.pais} (${m.cidade})</span>
+                  <span>🗣️ Idioma: ${m.pais === 'Portugal' ? 'Português' : 'Inglês'}</span>
+                </div>
+              </div>
+            </div>
+            <div>${actionBtn}</div>
+          </div>
+          <p class="mentor-bio">"${m.bio || 'Disponível para ajudar futuros intercambistas.'}"</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderEstudanteForumQuestions() {
+    const qList = DB.Questions.getAll().filter(q => q.autorId === currentUser.id);
+    const grid = document.getElementById('userContentGrid');
+
+    document.getElementById('statVal1').textContent = qList.length;
+
+    if (qList.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <div class="empty-state-icon">❓</div>
+          <p>Você ainda não postou nenhuma dúvida no Fórum.</p>
+          <button class="btn btn-secondary btn-sm mt-4" onclick="window.location.href='forum.html'">Ver o Fórum</button>
+        </div>
+      `;
+    } else {
+      grid.innerHTML = qList.map(q => `
+        <div class="card question-card" style="cursor:pointer;" onclick="window.location.href='forum.html?id=${q.id}'">
+          <span class="badge badge-blue mb-2" style="font-size:0.65rem;">${q.categoria}</span>
+          <h4 style="font-size: 0.95rem; margin-bottom: var(--space-2);">${q.titulo}</h4>
+          <div class="flex justify-between items-center" style="font-size: 0.75rem; color:var(--gray-500); margin-top: var(--space-3)">
+            <span>💬 ${q.respostas.length} respostas</span>
+            <span>👁 ${q.visualizacoes} visualizações</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // ── AÇÕES DE CONEXÃO ──
+  function requestConnection(mentorId, mentorName) {
+    const reqs = getLocalRequests();
+    
+    // Cria nova solicitação
+    const newReq = {
+      id: 'req_' + Date.now(),
+      studentId: currentUser.id,
+      studentName: currentUser.nome,
+      studentInitials: currentUser.iniciais,
+      mentorId: mentorId,
+      mensagem: `Olá ${mentorName}! Estou muito interessado no intercâmbio. Gostaria de me conectar para aprender com sua experiência.`,
+      data: new Date().toISOString().split('T')[0]
+    };
+
+    reqs.push(newReq);
+    saveLocalRequests(reqs);
+
+    Toast.success(`Solicitação de conexão enviada para ${mentorName}!`);
+    filterMentors(); // Atualiza a tela
+  }
+
+  function acceptRequest(reqId) {
+    let reqs = getLocalRequests();
+    let conns = getLocalConnections();
+
+    const reqIndex = reqs.findIndex(r => r.id === reqId);
+    if (reqIndex === -1) return;
+
+    const req = reqs[reqIndex];
+
+    // Adiciona às conexões ativas
+    const newConn = {
+      id: 'active_' + Date.now(),
+      mentorId: currentUser.id,
+      mentorName: currentUser.nome,
+      studentId: req.studentId,
+      studentName: req.studentName,
+      studentInitials: req.studentInitials,
+      paisInteresse: currentUser.pais || 'Irlanda',
+      mensagens: [
+        { sender: 'student', texto: req.mensagem, data: new Date().toISOString() },
+        { sender: 'mentor', texto: 'Solicitação aceita! Como posso ajudar você?', data: new Date().toISOString() }
+      ]
+    };
+
+    conns.push(newConn);
+    saveLocalConnections(conns);
+
+    // Remove do array de requests
+    reqs.splice(reqIndex, 1);
+    saveLocalRequests(reqs);
+
+    Toast.success(`Você aceitou a conexão de ${req.studentName}!`);
+    renderEgressoConnections(); // Recarrega conexões do egresso
+  }
+
+  function declineRequest(reqId) {
+    let reqs = getLocalRequests();
+    const reqIndex = reqs.findIndex(r => r.id === reqId);
+    if (reqIndex === -1) return;
+
+    const req = reqs[reqIndex];
+    reqs.splice(reqIndex, 1);
+    saveLocalRequests(reqs);
+
+    Toast.info(`Conexão de ${req.studentName} recusada.`);
+    renderEgressoConnections(); // Recarrega conexões do egresso
+  }
+
+  function toggleMentorAvailability() {
+    const isChecked = document.getElementById('chkAvailability').checked;
+    Toast.success(isChecked ? 'Você está disponível para novos alunos!' : 'Mentoria pausada temporariamente.');
+  }
+
+  // ── RENDERIZAÇÃO DE CONQUISTAS ──
+  function renderConquistas(role) {
+    const container = document.getElementById('conquistasContainer');
+    
+    const egressBadges = [
+      { emoji: '💡', title: 'Guia Pioneiro', desc: 'Compartilhou seu primeiro relato' },
+      { emoji: '🗣️', title: 'Multilíngue', desc: 'Comprovou proficiência em idiomas' },
+      { emoji: '🌟', title: 'Mentor Prata', desc: 'Ajudou mais de 3 estudantes na rede' }
+    ];
+
+    const studentBadges = [
+      { emoji: '🚀', title: 'Grande Sonhador', desc: 'Completou seu cadastro na rede' },
+      { emoji: '📚', title: 'Explorador Curioso', desc: 'Visualizou todos os destinos' },
+      { emoji: '💬', title: 'Participativo', desc: 'Fez sua primeira pergunta no fórum' }
+    ];
+
+    const list = role === 'egresso' ? egressBadges : studentBadges;
+
+    container.innerHTML = list.map(b => `
+      <div class="conquista-item">
+        <span class="conquista-badge">${b.emoji}</span>
+        <div>
+          <div class="conquista-title">${b.title}</div>
+          <div class="conquista-desc">${b.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── MODAL EDITAR PERFIL ──
+  function openEditModal() {
+    const modal = document.getElementById('editModal');
+    modal.classList.add('open');
+
+    // Preenche dados atuais no formulário
+    document.getElementById('editNome').value = currentUser.nome;
+    document.getElementById('editBio').value = currentUser.bio || '';
+    document.getElementById('editPais').value = currentUser.pais || 'Irlanda';
+    document.getElementById('editAno').value = currentUser.ano || 2023;
+
+    // Se estudante, esconde o campo Ano
+    const anoGroup = document.getElementById('editAnoGroup');
+    anoGroup.style.display = simulatedRole === 'egresso' ? 'block' : 'none';
+
+    // Reseta checkboxes de idiomas
+    const checkboxes = document.getElementsByName('editLanguages');
+    const userLanguages = currentUser.idiomas || [];
+    checkboxes.forEach(cb => {
+      cb.checked = userLanguages.some(l => l.includes(cb.value.split(' ')[1]));
+    });
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').classList.remove('open');
+  }
+
+  function closeEditModalOnOverlay(e) {
+    if (e.target === document.getElementById('editModal')) {
+      closeEditModal();
+    }
+  }
+
+  function saveProfileEdits(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('editNome').value.trim();
+    const bio = document.getElementById('editBio').value.trim();
+    const pais = document.getElementById('editPais').value;
+    const ano = document.getElementById('editAno').value;
+
+    // Pega idiomas marcados
+    const checkboxes = document.getElementsByName('editLanguages');
+    const selectedLangs = [];
+    checkboxes.forEach(cb => {
+      if (cb.checked) selectedLangs.push(cb.value);
+    });
+
+    const updates = {
+      nome,
+      bio,
+      pais,
+      idiomas: selectedLangs
+    };
+
+    if (simulatedRole === 'egresso') {
+      updates.ano = parseInt(ano);
+    }
+
+    const result = Auth.updateUser(updates);
+    if (result.ok) {
+      currentUser = result.user;
+      renderProfileView();
+      closeEditModal();
+      Navbar.updateUserUI(); // Atualiza o nome na navbar
+      Toast.success('Perfil atualizado com sucesso!');
+    } else {
+      Toast.error('Erro ao atualizar perfil.');
+    }
+  }
+
+  // ── MOCK INTERATIVE CHAT SYSTEM ──
+  let activeChatConnection = null;
+
+  function openChat(connId) {
+    const conns = getLocalConnections();
+    activeChatConnection = conns.find(c => c.id === connId);
+    if (!activeChatConnection) return;
+
+    currentActiveChatId = connId;
+
+    const drawer = document.getElementById('chatDrawer');
+    const targetName = document.getElementById('chatTargetName');
+    const avatarPlc = document.getElementById('chatAvatarPlaceholder');
+
+    // Define nome e iniciais no header do chat
+    const isCurrentUserMentor = activeChatConnection.mentorId === currentUser.id;
+    const partnerName = isCurrentUserMentor ? activeChatConnection.studentName : activeChatConnection.mentorName;
+    const partnerInitials = isCurrentUserMentor ? activeChatConnection.studentInitials : activeChatConnection.mentorName.split(' ').map(n=>n[0]).join('').slice(0,2);
+
+    targetName.textContent = partnerName;
+    avatarPlc.textContent = partnerInitials;
+
+    drawer.classList.add('open');
+    renderChatMessages();
+  }
+
+  function closeChat() {
+    document.getElementById('chatDrawer').classList.remove('open');
+    currentActiveChatId = null;
+    activeChatConnection = null;
+  }
+
+  function renderChatMessages() {
+    if (!activeChatConnection) return;
+    const chatBody = document.getElementById('chatBody');
+    const isCurrentUserMentor = activeChatConnection.mentorId === currentUser.id;
+
+    chatBody.innerHTML = activeChatConnection.mensagens.map(m => {
+      // Determina classe baseada em quem enviou
+      const isSentByMe = (isCurrentUserMentor && m.sender === 'mentor') || (!isCurrentUserMentor && m.sender === 'student');
+      return `
+        <div class="chat-bubble ${isSentByMe ? 'sent' : 'received'}">
+          ${m.texto}
+        </div>
+      `;
+    }).join('');
+
+    // Scroll para o fim do chat
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const msgTexto = input.value.trim();
+    if (!msgTexto) return;
+
+    if (!activeChatConnection) return;
+    const isCurrentUserMentor = activeChatConnection.mentorId === currentUser.id;
+
+    // Adiciona mensagem localmente
+    const newMsg = {
+      sender: isCurrentUserMentor ? 'mentor' : 'student',
+      texto: msgTexto,
+      data: new Date().toISOString()
+    };
+
+    activeChatConnection.mensagens.push(newMsg);
+    
+    // Atualiza no localStorage
+    const conns = getLocalConnections();
+    const idx = conns.findIndex(c => c.id === activeChatConnection.id);
+    if (idx !== -1) {
+      conns[idx] = activeChatConnection;
+      saveLocalConnections(conns);
+    }
+
+    input.value = '';
+    renderChatMessages();
+
+    // Resposta automática simulada (Simula a conexão de verdade!)
+    setTimeout(() => {
+      if (currentActiveChatId !== activeChatConnection.id) return; // Se fechou ou trocou de chat
+
+      let replyText = 'Muito obrigado pelas informações! Vou pesquisar mais sobre isso.';
+      if (isCurrentUserMentor) {
+        // Sou mentor, recebo resposta do aluno
+        const replies = [
+          'Nossa, que legal! E como funciona a moradia?',
+          'Vou dar uma olhada nas vagas no edital. Obrigado pelas dicas!',
+          'Muito obrigado! Você é uma excelente mentora.',
+          'Entendi. Vou praticar mais conversação de inglês a partir de agora.'
+        ];
+        replyText = replies[Math.floor(Math.random() * replies.length)];
+      } else {
+        // Sou aluno, recebo resposta do mentor
+        const replies = [
+          'Com certeza! O segredo é demonstrar muita atitude e vontade de aprender na entrevista.',
+          'Recomendo pesquisar sobre o clima da cidade antes de ir para arrumar a mala certa.',
+          'Pode me mandar suas dúvidas por aqui sempre que quiser!',
+          'A família anfitriã é super acolhedora, não precisa ter medo da adaptação.'
+        ];
+        replyText = replies[Math.floor(Math.random() * replies.length)];
+      }
+
+      const replyMsg = {
+        sender: isCurrentUserMentor ? 'student' : 'mentor',
+        texto: replyText,
+        data: new Date().toISOString()
+      };
+
+      activeChatConnection.mensagens.push(replyMsg);
+      
+      // Atualiza de novo no localStorage
+      conns[idx] = activeChatConnection;
+      saveLocalConnections(conns);
+      
+      renderChatMessages();
+    }, 1500);
+  }
+
+  function handleChatKeydown(e) {
+    if (e.key === 'Enter') {
+      sendChatMessage();
+    }
+  }
+</script>
+
+</body>
+</html>

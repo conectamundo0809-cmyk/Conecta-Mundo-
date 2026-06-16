@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fórum & FAQ — Conceta Mundo</title>
+  <meta name="description" content="Tire suas dúvidas, veja as perguntas frequentes sobre intercâmbio e fale com egressos da comunidade.">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* ── Estilos Exclusivos do Fórum & FAQ ── */
+    .forum-container {
+      padding-top: 100px;
+      padding-bottom: var(--space-20);
+      min-height: 100vh;
+      background: radial-gradient(ellipse 50% 40% at 20% 10%, rgba(0,201,177,0.06) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 50% at 80% 90%, rgba(36,72,212,0.06) 0%, transparent 80%);
+    }
+
+    /* Header e Tabs */
+    .forum-header {
+      text-align: center;
+      margin-bottom: var(--space-10);
+    }
+
+    .tab-bar {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: var(--space-4);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 8px 24px;
+      cursor: pointer;
+      position: relative;
+      transition: color var(--transition-fast);
+    }
+
+    .tab-btn:hover {
+      color: var(--white);
+    }
+
+    .tab-btn.active {
+      color: var(--teal-400);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -17px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-teal);
+      border-radius: 3px 3px 0 0;
+      box-shadow: var(--shadow-glow-teal);
+    }
+
+    /* Layout de Grid */
+    .forum-grid {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: var(--space-8);
+    }
+
+    @media (max-width: 992px) {
+      .forum-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Accordions de FAQ */
+    .faq-topic-section {
+      background: rgba(14, 18, 36, 0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    .faq-topic-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .faq-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: all var(--transition-base);
+    }
+
+    .faq-item:hover {
+      border-color: rgba(0, 201, 177, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .faq-trigger {
+      width: 100%;
+      padding: var(--space-4);
+      background: none;
+      border: none;
+      color: var(--white);
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .faq-trigger span.icon {
+      font-size: 0.8rem;
+      transition: transform var(--transition-base);
+      color: var(--teal-400);
+    }
+
+    .faq-item.open .faq-trigger span.icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-content {
+      padding: 0 var(--space-4) var(--space-4);
+      font-size: 0.88rem;
+      color: var(--gray-300);
+      line-height: 1.6;
+      display: none;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: var(--space-3);
+    }
+
+    .faq-item.open .faq-content {
+      display: block;
+    }
+
+    /* Relatos Recomendados no FAQ */
+    .faq-section-stories {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    .faq-stories-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    @media (max-width: 600px) {
+      .faq-stories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .faq-story-mini-card {
+      background: rgba(6, 8, 20, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+
+    .faq-story-mini-card:hover {
+      border-color: var(--teal-500);
+      transform: translateY(-2px);
+    }
+
+    /* Egressos Recomendados no FAQ */
+    .faq-section-mentors {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    .faq-mentors-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .faq-mentor-pill {
+      background: rgba(0, 201, 177, 0.06);
+      border: 1px solid rgba(0, 201, 177, 0.15);
+      border-radius: var(--radius-full);
+      padding: 6px 14px 6px 6px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.82rem;
+      color: var(--white);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .faq-mentor-pill:hover {
+      background: rgba(0, 201, 177, 0.12);
+      border-color: var(--teal-400);
+      transform: scale(1.03);
+    }
+
+    /* Buscador e Postagens no Fórum */
+    .forum-actions-bar {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+
+    .forum-search-input {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .category-filter-list {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+
+    /* Card de Pergunta do Fórum */
+    .forum-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    /* Modal Fazer Pergunta */
+    .ask-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .ask-modal.open { display: flex; }
+
+    /* Pergunta Detalhada (Visualização expandida) */
+    .question-detail-card {
+      background: rgba(14, 18, 36, 0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    .question-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .responses-section {
+      margin-top: var(--space-8);
+    }
+
+    .response-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+
+    /* Sidebar Egressos e Stats */
+    .sidebar-widget {
+      background: rgba(14, 18, 36, 0.7);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🌍</div>
+      <span class="nav-logo-text">Conceta<span>Mundo</span></span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="explorar.html">Explorar</a></li>
+      <li><a href="forum.html" class="active">Fórum</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Estado: visitante -->
+      <div id="navGuestBtns" class="flex gap-3">
+        <a href="login.html" class="btn btn-ghost btn-sm" id="btnNavLogin">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm" id="btnNavCadastro">Cadastrar</a>
+      </div>
+
+      <!-- Estado: logado -->
+      <div id="navUserArea" class="dropdown" style="display:none">
+        <button class="nav-avatar-btn" id="navAvatarBtn">
+          <div class="avatar-placeholder avatar-sm" id="navAvatarEl" style="font-size:0.7rem">?</div>
+          <span id="navUserName">Usuário</span>
+          <span>▾</span>
+        </button>
+        <div class="dropdown-menu" id="navDropdown">
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="perfil.html" class="dropdown-item">👤 Meu Perfil</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" id="logoutBtn">🚪 Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Container Principal do Fórum & FAQ ── -->
+<div class="forum-container">
+  <div class="container">
+    
+    <header class="forum-header">
+      <h1 class="text-gradient mb-2" style="font-size: 2.5rem; font-weight: 900;">Fórum & Central de FAQ</h1>
+      <p style="color: var(--gray-400)">Aonde nossa comunidade se encontra, tira dúvidas e compartilha experiências.</p>
+    </header>
+
+    <!-- Barra de Abas (FAQ vs Fórum) -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabBtnFaq" onclick="switchTab('faq')">💡 FAQ da Comunidade</button>
+      <button class="tab-btn" id="tabBtnForum" onclick="switchTab('forum')">💬 Discussões no Fórum</button>
+    </div>
+
+    <!-- Layout da Grade -->
+    <div class="forum-grid">
+      
+      <!-- COLUNA PRINCIPAL -->
+      <main class="forum-main-content">
+        
+        <!-- ==============================================
+             ABA 1: FAQ DA COMUNIDADE (Tópicos solicitados)
+             ============================================== -->
+        <section id="faqView">
+          
+          <!-- TÓPICO 1: COMO COMEÇAR A ESTUDAR -->
+          <div class="faq-topic-section">
+            <h2 class="faq-topic-title text-gradient">
+              <span>📚</span> Como começar a estudar?
+            </h2>
+            <p style="font-size: 0.88rem; color:var(--gray-400); margin-bottom: var(--space-4);">
+              Dicas de como se preparar academicamente e organizar seus estudos de idiomas para conquistar a vaga.
+            </p>
+
+            <div class="faq-accordion">
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  Qual é o melhor cronograma de estudos de inglês para a seleção?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  Para passar nas entrevistas de seleção de intercâmbio, o foco principal deve ser a conversação e compreensão auditiva. Egressos recomendam criar um cronograma dividindo 3 dias de escuta (podcasts e vídeos) e 2 dias de prática ativa de escrita de redações sobre si mesmo.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  Preciso pagar cursos caros ou consigo estudar de forma gratuita?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  Não é necessário pagar cursos! A maioria dos programas de intercâmbio avalia a maturidade e a comunicação básica. É possível estudar usando ferramentas gratuitas como Duolingo, canais do YouTube e o aplicativo gratuito Anki para vocabulário.
+                </div>
+              </div>
+            </div>
+
+            <!-- Relatos Fiéis e Egressos disponíveis vinculados a este tema -->
+            <div class="faq-section-stories">
+              <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px;">📖 Relatos Fiéis sobre preparação:</h4>
+              <div class="faq-stories-grid">
+                <!-- Relatos mockados -->
+                <div class="faq-story-mini-card" onclick="window.location.href='relato.html?id=s1'">
+                  <div style="font-weight:700; font-size:0.85rem; color:var(--white)">10 meses em Dublin: preparação</div>
+                  <p style="font-size:0.75rem; color:var(--gray-400)">Ana Beatriz conta como treinou inglês básico antes de embarcar.</p>
+                </div>
+                <div class="faq-story-mini-card" onclick="window.location.href='relato.html?id=s2'">
+                  <div style="font-weight:700; font-size:0.85rem; color:var(--white)">Toronto e eu: vencendo as barreiras</div>
+                  <p style="font-size:0.75rem; color:var(--gray-400)">Carlos Eduardo detalha como o futebol ajudou no aprendizado do inglês.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-section-mentors">
+              <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px;">✈️ Egressos que manjam deste assunto (Clique para conectar):</h4>
+              <div class="faq-mentors-list">
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u1')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">AB</div>
+                  <span>Ana Beatriz (Dublin)</span>
+                </div>
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u2')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">CE</div>
+                  <span>Carlos Eduardo (Toronto)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TÓPICO 2: COMO SE ADAPTAR À CULTURA -->
+          <div class="faq-topic-section">
+            <h2 class="faq-topic-title text-gradient-amber">
+              <span>🌍</span> Como se adaptar à cultura?
+            </h2>
+            <p style="font-size: 0.88rem; color:var(--gray-400); margin-bottom: var(--space-4);">
+              Lidar com o choque cultural, a alimentação diferente, regras da família anfitriã e a saudade de casa.
+            </p>
+
+            <div class="faq-accordion">
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  Como funciona a convivência com a Família Anfitriã (Host Family)?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  A Host Family compartilha a rotina da casa com você. É essencial manter o quarto limpo, respeitar os horários de refeição e comunicar sempre se for se atrasar. Trate a casa deles com respeito e ajude nas tarefas básicas.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  O que fazer quando a saudade bater forte nos primeiros meses?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  É completamente normal sentir saudade nos primeiros 60 dias. Tente não ligar para casa todos os dias — isso pode aumentar a saudade. Faça passeios, saia com amigos e participe de atividades escolares para ocupar a mente.
+                </div>
+              </div>
+            </div>
+
+            <!-- Relatos e Egressos disponíveis -->
+            <div class="faq-section-stories">
+              <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px;">📖 Relatos Fiéis sobre adaptação cultural:</h4>
+              <div class="faq-stories-grid">
+                <div class="faq-story-mini-card" onclick="window.location.href='relato.html?id=s3'">
+                  <div style="font-weight:700; font-size:0.85rem; color:var(--white)">Lisboa de bonde: choques de sotaque</div>
+                  <p style="font-size:0.75rem; color:var(--gray-400)">Mariana Oliveira conta sobre a imersão cultural no país vizinho.</p>
+                </div>
+                <div class="faq-story-mini-card" onclick="window.location.href='relato.html?id=s1'">
+                  <div style="font-weight:700; font-size:0.85rem; color:var(--white)">Lidando com a chuva de Dublin</div>
+                  <p style="font-size:0.75rem; color:var(--gray-400)">Relato sobre como adaptar a mente e o guarda-roupa ao clima.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-section-mentors">
+              <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px;">✈️ Egressos que dão dicas de adaptação (Clique para conectar):</h4>
+              <div class="faq-mentors-list">
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u3')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">MO</div>
+                  <span>Mariana Oliveira (Lisboa)</span>
+                </div>
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u1')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">AB</div>
+                  <span>Ana Beatriz (Dublin)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TÓPICO 3: OUTRAS PERGUNTAS FREQUENTES -->
+          <div class="faq-topic-section">
+            <h2 class="faq-topic-title text-gradient">
+              <span>📋</span> Outras Perguntas Frequentes
+            </h2>
+            <p style="font-size: 0.88rem; color:var(--gray-400); margin-bottom: var(--space-4);">
+              Dúvidas financeiras, regras do edital, documentação e visto.
+            </p>
+
+            <div class="faq-accordion">
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  Quais despesas o programa realmente cobre?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  As bolsas integrais de intercâmbio costumam cobrir: passagens aéreas, taxas de emissão de visto, seguro saúde internacional, matrícula da escola pública no exterior, hospedagem e alimentação na família anfitriã, além de uma ajuda de custo mensal para gastos pessoais.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-trigger" onclick="toggleFaq(this)">
+                  Qual a idade mínima para poder participar da seleção?
+                  <span class="icon">▼</span>
+                </button>
+                <div class="faq-content">
+                  A seleção ocorre anualmente para estudantes que estão cursando o 1º ou 2º ano do Ensino Médio regular na rede estadual, e que possuam entre 15 e 17 anos no momento da viagem.
+                </div>
+              </div>
+            </div>
+
+            <!-- Egressos para conectar -->
+            <div class="faq-section-mentors">
+              <h4 style="font-size:0.8rem; text-transform:uppercase; color:var(--gray-400); margin-bottom:12px;">✈️ Egressos disponíveis para tirar dúvidas burocráticas:</h4>
+              <div class="faq-mentors-list">
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u2')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">CE</div>
+                  <span>Carlos Eduardo (Toronto)</span>
+                </div>
+                <div class="faq-mentor-pill" onclick="redirectToConnect('u3')">
+                  <div class="avatar-placeholder avatar-sm" style="width:24px; height:24px; font-size:0.6rem">MO</div>
+                  <span>Mariana Oliveira (Lisboa)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ==============================================
+             ABA 2: DISCUSSÕES NO FÓRUM (Comunidade)
+             ============================================== -->
+        <section id="forumView" style="display:none;">
+          
+          <!-- Lista de Filtros e Busca -->
+          <div class="forum-actions-bar">
+            <input type="text" id="forumSearch" class="form-input forum-search-input" placeholder="🔍 Buscar no fórum por palavra-chave..." oninput="filterForum()">
+            <button class="btn btn-primary btn-sm" onclick="openAskModal()">✍️ Fazer Pergunta</button>
+          </div>
+
+          <div class="category-filter-list">
+            <span class="tag active" onclick="filterCategory(this, '')">Todas</span>
+            <span class="tag" onclick="filterCategory(this, 'seleção')">📋 Seleção</span>
+            <span class="tag" onclick="filterCategory(this, 'família anfitriã')">🏠 Família Anfitriã</span>
+            <span class="tag" onclick="filterCategory(this, 'documentação')">📄 Documentos</span>
+            <span class="tag" onclick="filterCategory(this, 'vida no exterior')">✈️ Vida no Exterior</span>
+          </div>
+
+          <!-- LISTA DE PERGUNTAS -->
+          <div class="forum-list" id="forumListContainer">
+            <!-- Renderizado dinamicamente -->
+          </div>
+
+          <!-- VISUALIZAÇÃO DETALHADA DA PERGUNTA (Oculto por padrão) -->
+          <div id="forumDetailContainer" style="display:none;">
+            <button class="btn btn-secondary btn-sm mb-4" onclick="closeQuestionDetail()">← Voltar às Discussões</button>
+            
+            <div class="question-detail-card" id="detailCard">
+              <!-- Renderizado dinamicamente -->
+            </div>
+
+            <!-- Respostas -->
+            <div class="responses-section">
+              <h3 class="mb-4 text-gradient" style="font-size:1.15rem">Respostas da Comunidade</h3>
+              <div id="answersContainer">
+                <!-- Respostas renderizadas dinamicamente -->
+              </div>
+
+              <!-- Formulário para Responder -->
+              <div class="card mt-6">
+                <h4 class="mb-3" style="font-size:1rem; color:var(--white);">Sua Resposta</h4>
+                <form id="replyForm" onsubmit="submitReply(event)">
+                  <textarea id="replyText" class="form-textarea" placeholder="Compartilhe seus conselhos e dicas com o autor..." required></textarea>
+                  <div style="text-align: right; margin-top: 12px;">
+                    <button type="submit" class="btn btn-primary btn-sm">Enviar Resposta</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- COLUNA LATERAL -->
+      <aside class="forum-sidebar">
+        
+        <!-- MENTORES EGRESSOS DISPONÍVEIS -->
+        <div class="sidebar-widget">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-4);" class="text-gradient">
+            ✈️ Egressos Conectores
+          </h3>
+          <p style="font-size:0.78rem; color:var(--gray-400); margin-bottom: var(--space-4);">
+            Egressos ativos prontos para falar no Programa de Conexão.
+          </p>
+          <div class="flex flex-col gap-3" id="sidebarMentorsContainer">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </div>
+
+        <!-- ESTATÍSTICAS DO FÓRUM -->
+        <div class="sidebar-widget">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-4);" class="text-gradient-amber">
+            📊 Painel de Discussão
+          </h3>
+          <div class="flex flex-col gap-3">
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.8rem; color: var(--gray-400);">Tópicos Ativos</span>
+              <strong style="color: var(--white)" id="statActiveTopics">3</strong>
+            </div>
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.8rem; color: var(--gray-400);">Respostas dadas</span>
+              <strong style="color: var(--white)" id="statReplies">4</strong>
+            </div>
+            <div class="flex justify-between" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="font-size: 0.8rem; color: var(--gray-400);">Taxa de Resolução</span>
+              <strong style="color: var(--white)">66%</strong>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ── MODAL FAZER PERGUNTA ── -->
+<div class="ask-modal" id="askModal" onclick="closeAskModalOnOverlay(event)">
+  <div class="edit-modal-content">
+    <div class="edit-modal-header">
+      <h3 style="font-size: 1.3rem;" class="text-gradient">✍️ Fazer Pergunta ao Fórum</h3>
+      <button class="edit-modal-close" onclick="closeAskModal()">×</button>
+    </div>
+
+    <form id="askForm" onsubmit="submitQuestion(event)">
+      <div class="form-group">
+        <label class="form-label" for="askTitle">Título da Pergunta (Seja claro)</label>
+        <input type="text" id="askTitle" class="form-input" placeholder="Ex: Quanto tempo demora a emissão do visto?" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="askCategory">Categoria</label>
+        <select id="askCategory" class="form-select form-input" required>
+          <option value="seleção">📋 Seleção & Entrevistas</option>
+          <option value="família anfitriã">🏠 Família Anfitriã</option>
+          <option value="documentação">📄 Documentos & Visto</option>
+          <option value="vida no exterior">✈️ Vida no Exterior</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="askBody">Detalhe sua Dúvida</label>
+        <textarea id="askBody" class="form-textarea" placeholder="Explique com detalhes qual a sua dúvida e o que você precisa saber..." required></textarea>
+      </div>
+
+      <div style="display: flex; gap: var(--space-3); margin-top: var(--space-6); justify-content: flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeAskModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary btn-sm">Publicar Pergunta</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:0">
+      <p>© 2025 Conceta Mundo · Conectando Experiências e Estudantes</p>
+      <p>Feito com ❤️ para transformar vidas</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let activeCategory = '';
+  let selectedQuestionId = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa discussões
+    renderForumList();
+    renderSidebarMentors();
+    updateStats();
+
+    // Verifica se há parâmetros de ID na URL para abrir direto
+    const qId = UI.getParam('id');
+    if (qId) {
+      switchTab('forum');
+      openQuestionDetail(qId);
+    }
+  });
+
+  // Alterna entre abas FAQ e Fórum
+  function switchTab(tab) {
+    const faqView = document.getElementById('faqView');
+    const forumView = document.getElementById('forumView');
+    const tabBtnFaq = document.getElementById('tabBtnFaq');
+    const tabBtnForum = document.getElementById('tabBtnForum');
+
+    if (tab === 'faq') {
+      faqView.style.display = 'block';
+      forumView.style.display = 'none';
+      tabBtnFaq.classList.add('active');
+      tabBtnForum.classList.remove('active');
+    } else {
+      faqView.style.display = 'none';
+      forumView.style.display = 'block';
+      tabBtnFaq.classList.remove('active');
+      tabBtnForum.classList.add('active');
+    }
+  }
+
+  // Toggle do Accordion de FAQ
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Redireciona o estudante para a página de perfil solicitando conexão
+  function redirectToConnect(mentorId) {
+    // Redireciona para o perfil que carrega como estudante, e dispara a conexão
+    window.location.href = `perfil.html?connectWith=${mentorId}`;
+  }
+
+  // Renderiza a lista de perguntas do fórum
+  function renderForumList() {
+    const questions = DB.Questions.getAll();
+    const searchVal = document.getElementById('forumSearch').value.toLowerCase();
+
+    // Filtra por busca e categoria
+    const filtered = questions.filter(q => {
+      const matchSearch = q.titulo.toLowerCase().includes(searchVal) || q.corpo.toLowerCase().includes(searchVal);
+      const matchCategory = !activeCategory || q.categoria === activeCategory;
+      return matchSearch && matchCategory;
+    });
+
+    const container = document.getElementById('forumListContainer');
+    
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <p>Nenhuma pergunta encontrada para os filtros selecionados.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(q => {
+      const autor = UI.getUserById(q.autorId);
+      const catIcons = { 'seleção': '📋', 'família anfitriã': '🏠', 'documentação': '📄', 'vida no exterior': '✈️' };
+      const icon = catIcons[q.categoria] || '❓';
+
+      return `
+        <div class="card question-card" style="cursor:pointer;" onclick="openQuestionDetail('${q.id}')">
+          <div class="flex justify-between items-center mb-3">
+            <span class="badge badge-blue">${icon} ${q.categoria}</span>
+            ${q.resolvida ? '<span class="badge badge-teal">✓ Resolvida</span>' : ''}
+          </div>
+          <h3 style="font-size:1.15rem; margin-bottom:8px; font-weight:700; color:var(--white)">${q.titulo}</h3>
+          <p style="font-size:0.875rem; color:var(--gray-300); margin-bottom:12px;">${UI.truncate(q.corpo, 120)}</p>
+          <div class="flex justify-between items-center" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top:12px;">
+            <div class="flex items-center gap-2">
+              ${UI.renderAvatar(autor, 'sm')}
+              <span style="font-size:0.8rem; color:var(--gray-400)">${autor ? autor.nome.split(' ')[0] : 'Estudante'}</span>
+            </div>
+            <div class="flex gap-4" style="font-size:0.8rem; color:var(--gray-500)">
+              <span>💬 ${q.respostas.length} respostas</span>
+              <span>👁 ${q.visualizacoes} views</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function filterForum() {
+    renderForumList();
+  }
+
+  function filterCategory(el, cat) {
+    // Altera a classe active da tag
+    document.querySelectorAll('.category-filter-list .tag').forEach(tag => tag.classList.remove('active'));
+    el.classList.add('active');
+
+    activeCategory = cat;
+    renderForumList();
+  }
+
+  // ── DETALHES DE UMA PERGUNTA INDIVIDUAL ──
+  function openQuestionDetail(qId) {
+    selectedQuestionId = qId;
+    
+    // Incrementa visualização
+    const questions = DB.Questions.getAll();
+    const qIndex = questions.findIndex(q => q.id === qId);
+    if (qIndex !== -1) {
+      questions[qIndex].visualizacoes = (questions[qIndex].visualizacoes || 0) + 1;
+      localStorage.setItem('cm_questions', JSON.stringify(questions));
+    }
+
+    const q = DB.Questions.getById(qId);
+    if (!q) return;
+
+    // Esconde a lista e mostra o painel detalhado
+    document.getElementById('forumListContainer').style.display = 'none';
+    document.querySelector('.forum-actions-bar').style.display = 'none';
+    document.querySelector('.category-filter-list').style.display = 'none';
+    
+    const detailContainer = document.getElementById('forumDetailContainer');
+    detailContainer.style.display = 'block';
+
+    const autor = UI.getUserById(q.autorId);
+    const detailCard = document.getElementById('detailCard');
+
+    detailCard.innerHTML = `
+      <div class="question-detail-header">
+        <span class="badge badge-blue">${q.categoria}</span>
+        <span style="font-size:0.8rem; color:var(--gray-500)">${UI.formatDate(q.createdAt)}</span>
+      </div>
+      <h2 style="font-size:1.5rem; margin-bottom:12px; font-weight:800">${q.titulo}</h2>
+      <p style="font-size:0.95rem; color:var(--gray-200); line-height:1.6; white-space:pre-line;">${q.corpo}</p>
+      <div class="flex items-center gap-3 mt-6" style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+        ${UI.renderAvatar(autor, 'md')}
+        <div>
+          <div style="font-weight:700; font-size:0.9rem; color:var(--white)">${autor ? autor.nome : 'Membro da Comunidade'}</div>
+          <div style="font-size:0.75rem; color:var(--gray-400)">${autor && autor.papel === 'egresso' ? 'Egresso do intercâmbio' : 'Candidato a intercâmbio'}</div>
+        </div>
+      </div>
+    `;
+
+    renderAnswers();
+  }
+
+  function closeQuestionDetail() {
+    selectedQuestionId = null;
+    document.getElementById('forumDetailContainer').style.display = 'none';
+    document.getElementById('forumListContainer').style.display = 'flex';
+    document.querySelector('.forum-actions-bar').style.display = 'flex';
+    document.querySelector('.category-filter-list').style.display = 'flex';
+    renderForumList();
+  }
+
+  function renderAnswers() {
+    const q = DB.Questions.getById(selectedQuestionId);
+    const container = document.getElementById('answersContainer');
+    
+    if (q.respostas.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state" style="padding:var(--space-4) 0">
+          <p style="color:var(--gray-500)">Nenhuma resposta para esta dúvida ainda. Seja o primeiro a ajudar!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = q.respostas.map(r => {
+      const autor = UI.getUserById(r.autorId);
+      const isEgresso = autor && autor.papel === 'egresso';
+      
+      return `
+        <div class="response-card">
+          <div class="flex justify-between items-center mb-3">
+            <div class="flex items-center gap-2">
+              ${UI.renderAvatar(autor, 'sm')}
+              <div>
+                <span style="font-weight:700; font-size:0.88rem; color:var(--white)">
+                  ${autor ? autor.nome : 'Membro'}
+                </span>
+                ${isEgresso ? '<span class="badge badge-teal" style="font-size:0.55rem; padding: 2px 6px; margin-left:6px">Egresso</span>' : ''}
+              </div>
+            </div>
+            <span style="font-size:0.75rem; color:var(--gray-500)">${r.createdAt}</span>
+          </div>
+          <p style="font-size:0.88rem; color:var(--gray-200); line-height:1.5">${r.conteudo}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function submitReply(e) {
+    e.preventDefault();
+    const textEl = document.getElementById('replyText');
+    const conteudo = textEl.value.trim();
+    if (!conteudo) return;
+
+    const user = Auth.getCurrentUser();
+    if (!user) {
+      Toast.error('Você precisa estar logado para responder.');
+      return;
+    }
+
+    DB.Questions.addResposta(selectedQuestionId, user.id, conteudo);
+    textEl.value = '';
+    renderAnswers();
+    updateStats();
+    Toast.success('Resposta enviada com sucesso!');
+  }
+
+  // ── MODAL FAZER PERGUNTAS ──
+  function openAskModal() {
+    if (!Auth.isLoggedIn()) {
+      Toast.error('Você precisa estar logado para fazer uma pergunta.');
+      setTimeout(() => window.location.href = 'login.html', 1000);
+      return;
+    }
+    document.getElementById('askModal').classList.add('open');
+  }
+
+  function closeAskModal() {
+    document.getElementById('askModal').classList.remove('open');
+  }
+
+  function closeAskModalOnOverlay(e) {
+    if (e.target === document.getElementById('askModal')) {
+      closeAskModal();
+    }
+  }
+
+  function submitQuestion(e) {
+    e.preventDefault();
+    const titulo = document.getElementById('askTitle').value.trim();
+    const categoria = document.getElementById('askCategory').value;
+    const corpo = document.getElementById('askBody').value.trim();
+
+    const user = Auth.getCurrentUser();
+    if (!user) return;
+
+    DB.Questions.create({
+      autorId: user.id,
+      titulo,
+      categoria,
+      corpo
+    });
+
+    closeAskModal();
+    document.getElementById('askForm').reset();
+    renderForumList();
+    updateStats();
+    Toast.success('Pergunta publicada no Fórum! 🎉');
+  }
+
+  // ── SIDEBAR RENDERS & STATS ──
+  function renderSidebarMentors() {
+    const allUsers = Auth.getUsers();
+    const mentors = allUsers.filter(u => u.papel === 'egresso').slice(0, 3);
+    const container = document.getElementById('sidebarMentorsContainer');
+
+    container.innerHTML = mentors.map(m => `
+      <div class="flex items-center justify-between" style="background:rgba(255,255,255,0.02); padding: 8px 12px; border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.04)">
+        <div class="flex items-center gap-3">
+          ${UI.renderAvatar(m, 'sm')}
+          <div>
+            <div style="font-weight:700; font-size:0.8rem; color:var(--white)">${m.nome.split(' ')[0]} ${m.nome.split(' ').pop()[0]}.</div>
+            <div style="font-size:0.7rem; color:var(--teal-400)">✈️ ${m.pais}</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="padding: 4px 10px; font-size:0.7rem" onclick="redirectToConnect('${m.id}')">Conectar</button>
+      </div>
+    `).join('');
+  }
+
+  function updateStats() {
+    const questions = DB.Questions.getAll();
+    let totalReplies = 0;
+    questions.forEach(q => totalReplies += q.respostas.length);
+
+    document.getElementById('statActiveTopics').textContent = questions.length;
+    document.getElementById('statReplies').textContent = totalReplies;
+  }
+</script>
+
+</body>
+</html>

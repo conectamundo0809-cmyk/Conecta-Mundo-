@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorar Destinos — Conceta Mundo</title>
+  <meta name="description" content="Descubra destinos incríveis de intercâmbio, veja fotos de pontos turísticos fascinantes, e conheça os programas parceiros.">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* ── Estilos do Explorador de Destinos ── */
+    .explore-container {
+      padding-top: 100px;
+      padding-bottom: var(--space-20);
+      min-height: 100vh;
+      background: radial-gradient(ellipse 50% 45% at 80% 15%, rgba(0,201,177,0.06) 0%, transparent 70%),
+                  radial-gradient(ellipse 65% 55% at 15% 85%, rgba(36,72,212,0.06) 0%, transparent 80%);
+    }
+
+    .explore-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    /* Barra de filtros */
+    .filter-section {
+      background: rgba(14, 18, 36, 0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-10);
+      backdrop-filter: blur(10px);
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      margin-bottom: var(--space-3);
+      font-weight: 700;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Grid de Destinos */
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-12);
+    }
+
+    @media (max-width: 992px) {
+      .explore-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 650px) {
+      .explore-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Detalhes do Destino Expandido */
+    .details-view {
+      display: none;
+      background: rgba(14, 18, 36, 0.85);
+      border: 1px solid rgba(0,201,177,0.2);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-10);
+      box-shadow: var(--shadow-glow-teal), var(--shadow-lg);
+      backdrop-filter: blur(20px);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-6);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: var(--space-4);
+    }
+
+    .details-title-area {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .details-flag {
+      font-size: 3rem;
+    }
+
+    .details-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    @media (max-width: 768px) {
+      .details-info-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+    }
+
+    .details-info-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      text-align: center;
+    }
+
+    .details-info-val {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    /* Galeria de Pontos Turísticos */
+    .tourist-section {
+      margin-top: var(--space-8);
+    }
+
+    .tourist-title {
+      font-size: 1.4rem;
+      margin-bottom: var(--space-5);
+      text-align: center;
+    }
+
+    .tourist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+
+    @media (max-width: 768px) {
+      .tourist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tourist-card {
+      background: rgba(6, 8, 20, 0.6);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition-base);
+    }
+
+    .tourist-card:hover {
+      border-color: var(--teal-400);
+      transform: translateY(-4px);
+    }
+
+    .tourist-img-wrapper {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tourist-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+
+    .tourist-card:hover .tourist-img {
+      transform: scale(1.08);
+    }
+
+    .tourist-info {
+      padding: var(--space-5);
+    }
+
+    .tourist-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: var(--space-2);
+    }
+
+    .tourist-desc {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      line-height: 1.5;
+    }
+
+    /* Área de Egressos/Mentores Disponíveis */
+    .mentors-section {
+      margin-top: var(--space-8);
+      padding-top: var(--space-8);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mentors-section-title {
+      font-size: 1.2rem;
+      margin-bottom: var(--space-4);
+      color: var(--white);
+    }
+
+    .mentors-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+
+    @media (max-width: 768px) {
+      .mentors-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mentor-explore-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      transition: border-color var(--transition-fast);
+    }
+
+    .mentor-explore-card:hover {
+      border-color: rgba(0, 201, 177, 0.3);
+    }
+
+    .mentor-explore-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🌍</div>
+      <span class="nav-logo-text">Conceta<span>Mundo</span></span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="explorar.html" class="active">Explorar</a></li>
+      <li><a href="forum.html">Fórum</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Estado: visitante -->
+      <div id="navGuestBtns" class="flex gap-3">
+        <a href="login.html" class="btn btn-ghost btn-sm" id="btnNavLogin">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm" id="btnNavCadastro">Cadastrar</a>
+      </div>
+
+      <!-- Estado: logado -->
+      <div id="navUserArea" class="dropdown" style="display:none">
+        <button class="nav-avatar-btn" id="navAvatarBtn">
+          <div class="avatar-placeholder avatar-sm" id="navAvatarEl" style="font-size:0.7rem">?</div>
+          <span id="navUserName">Usuário</span>
+          <span>▾</span>
+        </button>
+        <div class="dropdown-menu" id="navDropdown">
+          <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+          <a href="perfil.html" class="dropdown-item">👤 Meu Perfil</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" id="logoutBtn">🚪 Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Container Principal do Explorador ── -->
+<div class="explore-container">
+  <div class="container">
+    
+    <header class="explore-header">
+      <span class="badge badge-teal mb-3">📍 Destinos Recomendados</span>
+      <h1 class="text-gradient mb-2" style="font-weight: 900;">Destinos que Inspiram</h1>
+      <p style="color: var(--gray-400); max-width: 600px; margin: 0 auto;">
+        Conheça os pontos turísticos fascinantes, veja a duração e descubra os programas que apoiam a viagem de quem já viveu essa transformação.
+      </p>
+    </header>
+
+    <!-- Filtros -->
+    <section class="filter-section">
+      <div class="filter-label">Filtrar por Programa de Intercâmbio</div>
+      <div class="filter-group" id="filterPrograms">
+        <span class="tag active" onclick="filterBy('programa', '')">Todos os Programas</span>
+        <span class="tag" onclick="filterBy('programa', 'Conexão Mundo')">Conexão Mundo</span>
+        <span class="tag" onclick="filterBy('programa', 'Jovens Embaixadores')">Jovens Embaixadores</span>
+        <span class="tag" onclick="filterBy('programa', 'Líderes Estaduais')">Líderes Estaduais</span>
+        <span class="tag" onclick="filterBy('programa', 'Bolsa CPLP')">Bolsa CPLP</span>
+        <span class="tag" onclick="filterBy('programa', 'Estudos Francófonos')">Estudos Francófonos</span>
+        <span class="tag" onclick="filterBy('programa', 'Paci Alemanha')">Paci Alemanha</span>
+      </div>
+
+      <div class="filter-label" style="margin-top: 16px;">Filtrar por Duração</div>
+      <div class="filter-group" id="filterDurations">
+        <span class="tag active" onclick="filterBy('duracao', '')">Qualquer Duração</span>
+        <span class="tag" onclick="filterBy('duracao', '3 meses')">Curto Prazo (3 meses)</span>
+        <span class="tag" onclick="filterBy('duracao', '6 meses')">Médio Prazo (6 meses)</span>
+        <span class="tag" onclick="filterBy('duracao', '10 meses')">Longo Prazo (10 meses)</span>
+        <span class="tag" onclick="filterBy('duracao', '12 meses')">Anual (12 meses)</span>
+      </div>
+    </section>
+
+    <!-- Visualização de Detalhes Expandidos (Oculto por padrão) -->
+    <section class="details-view" id="detailsView">
+      <div class="details-header">
+        <div class="details-title-area">
+          <span class="details-flag" id="detailFlag">🌍</span>
+          <div>
+            <h2 id="detailCountryName" style="font-weight: 800;">Nome do País</h2>
+            <p id="detailSubtitle" style="color: var(--teal-400); font-weight: 600; font-size: 0.9rem;">Idioma · Capital</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="closeDetails()">Fechar Detalhes ×</button>
+      </div>
+
+      <div class="details-info-grid">
+        <div class="details-info-card">
+          <p style="font-size:0.75rem; color:var(--gray-500); text-transform:uppercase;">Duração</p>
+          <div class="details-info-val" id="detailDuration">3 meses</div>
+        </div>
+        <div class="details-info-card">
+          <p style="font-size:0.75rem; color:var(--gray-500); text-transform:uppercase;">Programa Viabilizador</p>
+          <div class="details-info-val" id="detailProgram">Conexão Mundo</div>
+        </div>
+        <div class="details-info-card">
+          <p style="font-size:0.75rem; color:var(--gray-500); text-transform:uppercase;">Idioma Oficial</p>
+          <div class="details-info-val" id="detailLang">Espanhol</div>
+        </div>
+      </div>
+
+      <p id="detailDescText" style="font-size: 1.05rem; color: var(--gray-200); line-height: 1.6; margin-bottom: 24px; text-align: center;">
+        Descrição do destino aqui.
+      </p>
+
+      <!-- Galeria de Pontos Turísticos -->
+      <div class="tourist-section">
+        <h3 class="tourist-title text-gradient">📸 Pontos Turísticos Para te Inspirar</h3>
+        <div class="tourist-grid" id="touristGrid">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Egressos Relacionados -->
+      <div class="mentors-section">
+        <h3 class="mentors-section-title">👥 Egressos conectados a este país:</h3>
+        <div class="mentors-grid" id="mentorsGrid">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid de Cards de Países -->
+    <main class="explore-grid" id="exploreGrid">
+      <!-- Cards renderizados dinamicamente -->
+    </main>
+
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:0">
+      <p>© 2025 Conceta Mundo · Conectando Experiências e Estudantes</p>
+      <p>Feito com ❤️ para transformar vidas</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Banco de Dados Local de Pontos Turísticos
+  const TOURIST_SPOTS = {
+    'Irlanda': [
+      { name: 'Cliffs of Moher', desc: 'Penhascos majestosos esculpidos pelo vento e pelo mar que oferecem vistas infinitas sobre o oceano Atlântico.', img: 'https://images.unsplash.com/photo-1488114674916-24e5d66579b1?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Temple Bar (Dublin)', desc: 'As famosas ruas de paralelepípedo com pubs históricos que ecoam música celta vibrante o dia inteiro.', img: 'https://images.unsplash.com/photo-1549918838-750729ae6f76?w=600&auto=format&fit=crop&q=80' }
+    ],
+    'Canadá': [
+      { name: 'Niagara Falls', desc: 'Uma queda d\'água estrondosa e de tirar o fôlego na fronteira canadense, cercada por uma névoa lendária.', img: 'https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=600&auto=format&fit=crop&q=80' },
+      { name: 'CN Tower (Toronto)', desc: 'A colossal torre de comunicações que define a silhueta moderna de Toronto, com mirantes sobre o lago Ontário.', img: 'https://images.unsplash.com/photo-1507992781348-31024bae75f1?w=600&auto=format&fit=crop&q=80' }
+    ],
+    'Portugal': [
+      { name: 'Torre de Belém (Lisboa)', desc: 'Monumento histórico de arquitetura manuelina erguido nas águas do Tejo, símbolo das Grandes Navegações.', img: 'https://images.unsplash.com/photo-1509840841025-9088ba78a826?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Elétrico 28', desc: 'O charmoso bonde elétrico amarelo que serpenteia as colinas íngremes e rústicas do bairro de Alfama.', img: 'https://images.unsplash.com/photo-1555992336-03a23c7b20eb?w=600&auto=format&fit=crop&q=80' }
+    ],
+    'Alemanha': [
+      { name: 'Portão de Brandemburgo', desc: 'O monumental símbolo histórico de Berlim, palco de grandes acontecimentos e da reunificação alemã.', img: 'https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Castelo de Neuschwanstein', desc: 'O espetacular castelo de conto de fadas que inspirou a Disney, aninhado entre os picos verdes dos Alpes Bávaros.', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&auto=format&fit=crop&q=80' }
+    ],
+    'França': [
+      { name: 'Torre Eiffel (Paris)', desc: 'A icônica gigante de ferro brilhando sobre a Cidade Luz, com vistas de tirar o fôlego da colina de Montmartre.', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Museu do Louvre', desc: 'A pirâmide de vidro futurista que serve de portal para o maior acervo histórico e artístico do planeta.', img: 'https://images.unsplash.com/photo-1569084024859-4b8c81204f97?w=600&auto=format&fit=crop&q=80' }
+    ],
+    'Espanha': [
+      { name: 'Basílica da Sagrada Família', desc: 'O incrível templo modernista de Antoni Gaudí que desafia a gravidade com suas formas orgânicas e torres exuberantes.', img: 'https://images.unsplash.com/photo-1583779457094-0aaec25a6918?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Parque Güell (Barcelona)', desc: 'Um parque mágico repleto de esculturas coloridas de azulejos e mirantes que oferecem panoramas lindos do mar.', img: 'https://images.unsplash.com/photo-1523531294919-4bea7c65e894?w=600&auto=format&fit=crop&q=80' }
+    ]
+  };
+
+  let filterState = {
+    programa: '',
+    duracao: ''
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderGrid();
+
+    // Abre direto se tiver query param na URL
+    const queryPais = UI.getParam('pais');
+    if (queryPais) {
+      const target = DB.Destinations.getByPais(queryPais);
+      if (target) {
+        showDetails(target.id);
+      }
+    }
+  });
+
+  // Renderização principal do grid
+  function renderGrid() {
+    const destinations = DB.Destinations.getAll();
+    const grid = document.getElementById('exploreGrid');
+
+    const filtered = destinations.filter(d => {
+      const matchProgram = !filterState.programa || d.programa === filterState.programa;
+      const matchDuration = !filterState.duracao || d.duracao === filterState.duracao;
+      return matchProgram && matchDuration;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <div class="empty-state-icon">🌍</div>
+          <p>Nenhum destino atende aos filtros aplicados.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(d => `
+      <div class="card dest-card" onclick="showDetails('${d.id}')" style="cursor:pointer;">
+        <div class="dest-flag">${d.bandeira}</div>
+        <h3 class="dest-country" style="font-size:1.3rem; margin-bottom: var(--space-2);">${d.pais}</h3>
+        <div class="dest-lang" style="font-size:0.82rem; color:var(--teal-400); margin-bottom:var(--space-3)">🗣 ${d.idioma}</div>
+        <p class="dest-desc" style="font-size:0.875rem; line-height:1.5; margin-bottom: var(--space-4);">${d.descricao}</p>
+        <div class="dest-meta">
+          <span class="dest-meta-item">📅 ${d.duracao}</span>
+          <span class="dest-meta-item">🏛️ ${d.programa}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Filtragem dinâmica
+  function filterBy(type, val) {
+    // Altera o estado do filtro
+    filterState[type] = val;
+
+    // Atualiza tags ativas no HTML correspondente
+    const containerId = type === 'programa' ? 'filterPrograms' : 'filterDurations';
+    const tags = document.querySelectorAll(`#${containerId} .tag`);
+    
+    tags.forEach(tag => {
+      const onclickAttr = tag.getAttribute('onclick');
+      if (onclickAttr && onclickAttr.includes(`'${val}'`)) {
+        tag.classList.add('active');
+      } else {
+        tag.classList.remove('active');
+      }
+    });
+
+    renderGrid();
+    closeDetails(); // Fecha painel de detalhes antigo
+  }
+
+  // Abre painel de detalhes do destino selecionado
+  function showDetails(id) {
+    const d = DB.Destinations.getById(id);
+    if (!d) return;
+
+    // Scroll suave para a seção de detalhes
+    document.getElementById('detailsView').style.display = 'block';
+    UI.scrollTo('#detailsView');
+
+    // Insere dados no cabeçalho e informações
+    document.getElementById('detailFlag').textContent = d.bandeira;
+    document.getElementById('detailCountryName').textContent = d.pais;
+    document.getElementById('detailSubtitle').textContent = `🗣 ${d.idioma} · 📍 Capital: ${d.capital}`;
+    document.getElementById('detailDuration').textContent = d.duracao;
+    document.getElementById('detailProgram').textContent = d.programa;
+    document.getElementById('detailLang').textContent = d.idioma;
+    document.getElementById('detailDescText').textContent = d.descricao;
+
+    // Renderiza Galeria de Pontos Turísticos
+    const touristGrid = document.getElementById('touristGrid');
+    const spots = TOURIST_SPOTS[d.pais] || [];
+
+    if (spots.length === 0) {
+      touristGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:var(--gray-500)">Nenhum ponto turístico cadastrado para este país.</p>';
+    } else {
+      touristGrid.innerHTML = spots.map(s => `
+        <div class="tourist-card">
+          <div class="tourist-img-wrapper">
+            <img src="${s.img}" alt="${s.name}" class="tourist-img">
+          </div>
+          <div class="tourist-info">
+            <h4 class="tourist-name">${s.name}</h4>
+            <p class="tourist-desc">${s.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Renderiza Egressos Recomendados
+    const mentorsGrid = document.querySelector('.mentors-grid');
+    const allUsers = Auth.getUsers();
+    // Filtra usuários egressos associados a este país
+    const relevantMentors = allUsers.filter(u => u.papel === 'egresso' && u.pais === d.pais);
+
+    if (relevantMentors.length === 0) {
+      mentorsGrid.innerHTML = '<p style="grid-column: 1/-1; font-size:0.85rem; color:var(--gray-500);">Nenhum egresso desse país cadastrado na rede no momento.</p>';
+    } else {
+      mentorsGrid.innerHTML = relevantMentors.map(m => `
+        <div class="mentor-explore-card">
+          <div class="mentor-explore-info">
+            ${UI.renderAvatar(m, 'sm')}
+            <div>
+              <h5 style="font-size:0.9rem; color:var(--white);">${m.nome}</h5>
+              <p style="font-size:0.75rem; color:var(--gray-400)">Cidade: ${m.cidade || 'Não informada'} · Ano: ${m.ano || 'N/A'}</p>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="redirectToConnect('${m.id}')">Conectar</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  // Fecha painel de detalhes
+  function closeDetails() {
+    document.getElementById('detailsView').style.display = 'none';
+  }
+
+  // Redireciona para conexão no perfil
+  function redirectToConnect(mentorId) {
+    window.location.href = `perfil.html?connectWith=${mentorId}`;
+  }
+</script>
+</body>
+</html>

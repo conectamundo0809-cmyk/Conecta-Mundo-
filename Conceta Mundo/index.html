@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conceta Mundo — Conectando Experiências pelo Mundo</title>
+  <meta name="description"
+    content="Plataforma colaborativa onde ex-intercambistas compartilham relatos e dicas reais para inspirar e orientar estudantes do ensino médio.">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* ── Hero Section ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0, 201, 177, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(36, 72, 212, 0.15) 0%, transparent 60%);
+    }
+
+    /* Bolhas decorativas */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+    }
+
+    .hero-orb-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--teal-500);
+      top: -100px;
+      right: -100px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero-orb-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--blue-500);
+      bottom: -50px;
+      left: -50px;
+      animation: float 10s ease-in-out infinite 2s;
+    }
+
+    .hero-orb-3 {
+      width: 200px;
+      height: 200px;
+      background: var(--amber-500);
+      top: 50%;
+      right: 25%;
+      animation: float 6s ease-in-out infinite 1s;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px var(--space-6) var(--space-20);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 6px 16px;
+      background: rgba(0, 201, 177, 0.12);
+      border: 1px solid rgba(0, 201, 177, 0.3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--teal-400);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-title .highlight {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--gray-300);
+      line-height: 1.7;
+      margin-bottom: var(--space-8);
+      max-width: 480px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: var(--space-8);
+      margin-top: var(--space-10);
+      padding-top: var(--space-8);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-stat-num {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* Cards flutuantes lado direito */
+    .hero-visual {
+      position: relative;
+      height: 480px;
+    }
+
+    .hero-card-float {
+      position: absolute;
+      background: rgba(20, 24, 40, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hcf-1 {
+      top: 0;
+      left: 0;
+      right: 60px;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .hcf-2 {
+      bottom: 60px;
+      right: 0;
+      left: 80px;
+      animation: float 7s ease-in-out infinite 1.5s;
+    }
+
+    .hcf-3 {
+      bottom: 0;
+      left: 20px;
+      right: 120px;
+      animation: float 6s ease-in-out infinite 0.8s;
+    }
+
+    .hcf-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .hcf-flag {
+      font-size: 1.8rem;
+    }
+
+    .hcf-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .hcf-country {
+      font-size: 0.78rem;
+      color: var(--teal-400);
+    }
+
+    .hcf-quote {
+      font-size: 0.82rem;
+      color: var(--gray-300);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .hcf-stat {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .hcf-stat-icon {
+      font-size: 1.5rem;
+    }
+
+    .hcf-stat-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .hcf-stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+
+    /* ── Como Funciona ── */
+    .how-section {
+      background: var(--gray-900);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto var(--space-16);
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(0, 201, 177, 0.1);
+      border: 1px solid rgba(0, 201, 177, 0.25);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal-400);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .step-card {
+      text-align: center;
+      padding: var(--space-10) var(--space-6);
+    }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
+      background: var(--gradient-teal);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      margin: 0 auto var(--space-5);
+      box-shadow: var(--shadow-glow-teal);
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-4);
+    }
+
+    .step-title {
+      margin-bottom: var(--space-3);
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      color: var(--gray-400);
+      line-height: 1.6;
+    }
+
+    /* ── Destinos Preview ── */
+    .destinations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+
+    .dest-card {
+      background: var(--gradient-card);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: all var(--transition-slow);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .dest-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 201, 177, 0.3);
+      box-shadow: var(--shadow-glow-teal);
+    }
+
+    .dest-flag {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-3);
+    }
+
+    .dest-country {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: var(--space-1);
+    }
+
+    .dest-lang {
+      font-size: 0.8rem;
+      color: var(--teal-400);
+      margin-bottom: var(--space-3);
+    }
+
+    .dest-desc {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      line-height: 1.5;
+      margin-bottom: var(--space-4);
+    }
+
+    .dest-meta {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .dest-meta-item {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Relatos Preview ── */
+    .stories-preview {
+      background: var(--gray-900);
+    }
+
+    .story-card {
+      cursor: pointer;
+    }
+
+    .story-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-4);
+    }
+
+    .story-card-country {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .country-flag {
+      font-size: 1.6rem;
+    }
+
+    .country-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--white);
+    }
+
+    .country-sub {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+
+    .story-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: var(--space-3);
+      line-height: 1.35;
+    }
+
+    .story-card-resumo {
+      font-size: 0.875rem;
+      color: var(--gray-400);
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+
+    .story-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-4);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .story-card-autor {
+      font-size: 0.82rem;
+      color: var(--gray-400);
+    }
+
+    .story-card-stats {
+      display: flex;
+      gap: var(--space-3);
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    /* ── CTA Banner ── */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(0, 201, 177, 0.08), rgba(36, 72, 212, 0.12));
+      border-top: 1px solid rgba(0, 201, 177, 0.1);
+      border-bottom: 1px solid rgba(0, 201, 177, 0.1);
+    }
+
+    .cta-inner {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-6);
+    }
+
+    .cta-title {
+      margin-bottom: var(--space-4);
+    }
+
+    .cta-desc {
+      font-size: 1.05rem;
+      color: var(--gray-300);
+      margin-bottom: var(--space-8);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--gray-950);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-10);
+      margin-bottom: var(--space-12);
+    }
+
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-top: var(--space-4);
+      max-width: 280px;
+    }
+
+    .footer-col h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      margin-bottom: var(--space-5);
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-col ul a {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+      transition: color var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--teal-400);
+    }
+
+    .footer-bottom {
+      padding-top: var(--space-8);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 0.8rem;
+      color: var(--gray-600);
+    }
+
+    .footer-bottom a {
+      color: var(--gray-500);
+      text-decoration: none;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--teal-400);
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .destinations-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Modal de Relatos Interativo ── */
+    .reports-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 20, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .reports-modal-content {
+      background: var(--gradient-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1050px;
+      height: 85vh;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow-lg), var(--shadow-glow-blue);
+      animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .reports-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--gray-300);
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all var(--transition-fast);
+    }
+
+    .reports-modal-close:hover {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--coral-400);
+      color: var(--coral-400);
+    }
+
+    /* Coluna Esquerda: Lista de Relatos */
+    .reports-modal-list-pane {
+      border-right: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(6, 8, 20, 0.4);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .reports-search-box {
+      padding: var(--space-4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .reports-search-box input {
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      border-radius: var(--radius-full);
+    }
+
+    .reports-mini-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-3);
+    }
+
+    .reports-mini-card {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      background: rgba(255, 255, 255, 0.02);
+      transition: all var(--transition-base);
+    }
+
+    .reports-mini-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(3px);
+    }
+
+    .reports-mini-card.active {
+      background: rgba(0, 201, 177, 0.08);
+      border-color: rgba(0, 201, 177, 0.3);
+      box-shadow: 0 0 15px rgba(0, 201, 177, 0.1);
+    }
+
+    .reports-mini-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reports-mini-meta {
+      font-size: 0.72rem;
+      color: var(--gray-400);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Coluna Direita: Detalhes do Relato */
+    .reports-modal-detail-pane {
+      padding: var(--space-8);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      height: 100%;
+    }
+
+    .story-detail-header h2 {
+      font-weight: 800;
+      margin-top: var(--space-2);
+    }
+
+    .story-detail-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .story-detail-meta-item {
+      font-size: 0.8rem;
+      color: var(--gray-300);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .story-detail-body {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--gray-200);
+    }
+
+    .story-detail-body p {
+      margin-bottom: var(--space-4);
+    }
+
+    .story-detail-body h3 {
+      font-size: 1.15rem;
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-2);
+      color: var(--white);
+      border-left: 3px solid var(--teal-500);
+      padding-left: 8px;
+    }
+
+    .story-detail-body strong {
+      color: var(--teal-300);
+    }
+
+    .story-detail-actions {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: var(--space-4) 0;
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .like-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--gray-300);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all var(--transition-base);
+    }
+
+    .like-btn:hover {
+      background: rgba(244, 63, 94, 0.1);
+      border-color: var(--coral-500);
+      color: var(--coral-400);
+      transform: translateY(-1px);
+    }
+
+    .like-btn.liked {
+      background: var(--coral-500);
+      border-color: var(--coral-500);
+      color: var(--white);
+    }
+
+    /* Comentários */
+    .story-detail-comments-sec {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .comment-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-2);
+    }
+
+    .comment-author {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .comment-date {
+      font-size: 0.72rem;
+      color: var(--gray-500);
+    }
+
+    .comment-text {
+      font-size: 0.85rem;
+      color: var(--gray-300);
+      line-height: 1.5;
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+    }
+
+    .comment-form textarea {
+      min-height: 70px;
+      font-size: 0.85rem;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Modal Responsivo */
+    @media (max-width: 800px) {
+      .reports-modal-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 140px 1fr;
+        height: 90vh;
+      }
+
+      .reports-modal-list-pane {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .reports-mini-list {
+        display: flex;
+        gap: var(--space-2);
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: var(--space-2) var(--space-4);
+        height: auto;
+      }
+
+      .reports-mini-card {
+        margin-bottom: 0;
+        min-width: 180px;
+        flex-shrink: 0;
+      }
+
+      .reports-mini-card:hover {
+        transform: none;
+      }
+
+      .reports-modal-detail-pane {
+        padding: var(--space-4);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🌍</div>
+        <span class="nav-logo-text">Conceta<span>Mundo</span></span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="explorar.html">Explorar</a></li>
+        <li><a href="forum.html">Fórum</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Estado: visitante -->
+        <div id="navGuestBtns" class="flex gap-3">
+          <a href="login.html" class="btn btn-ghost btn-sm" id="btnNavLogin">Entrar</a>
+          <a href="cadastro.html" class="btn btn-primary btn-sm" id="btnNavCadastro">Cadastrar</a>
+        </div>
+
+        <!-- Estado: logado -->
+        <div id="navUserArea" class="dropdown" style="display:none">
+          <button class="nav-avatar-btn" id="navAvatarBtn">
+            <div class="avatar-placeholder avatar-sm" id="navAvatarEl" style="font-size:0.7rem">?</div>
+            <span id="navUserName">Usuário</span>
+            <span>▾</span>
+          </button>
+          <div class="dropdown-menu" id="navDropdown">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="perfil.html" class="dropdown-item">👤 Meu Perfil</a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item danger" id="logoutBtn">🚪 Sair</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">✈️ Conectando Experiências e Estudantes</div>
+        <h1 class="hero-title">
+          Conecte-se com quem já <span class="highlight">explorou o mundo</span>.
+        </h1>
+        <p class="hero-desc">
+          Uma plataforma colaborativa e gratuita onde estudantes do ensino médio tiram dúvidas, leem relatos reais e
+          conversam com egressos de diversos intercâmbios escolares.
+        </p>
+        <div class="hero-btns">
+          <a href="relatos.html" class="btn btn-primary btn-lg" id="btnHeroRelatos">📖 Ver Relatos</a>
+          <a href="explorar.html" class="btn btn-secondary btn-lg" id="btnHeroDestinos">🌍 Destinos</a>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">6</div>
+            <div class="hero-stat-label">Destinos relatados</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">Colaborativo</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">+200</div>
+            <div class="hero-stat-label">Egressos na rede</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card-float hcf-1">
+          <div class="hcf-user">
+            <span class="hcf-flag">🇮🇪</span>
+            <div>
+              <div class="hcf-name">Ana Beatriz</div>
+              <div class="hcf-country">Dublin, Irlanda · 2023</div>
+            </div>
+          </div>
+          <p class="hcf-quote">"Voltei fluente em inglês, aprovada no vestibular e com amigos em 20 países."</p>
+        </div>
+
+        <div class="hero-card-float hcf-2">
+          <div class="hcf-stat">
+            <span class="hcf-stat-icon">🏆</span>
+            <div>
+              <div class="hcf-stat-val">+200</div>
+              <div class="hcf-stat-label">Egressos compartilhando experiências</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card-float hcf-3">
+          <div class="hcf-user">
+            <span class="hcf-flag">🇨🇦</span>
+            <div>
+              <div class="hcf-name">Carlos Eduardo</div>
+              <div class="hcf-country">Toronto, Canadá · 2022</div>
+            </div>
+          </div>
+          <p class="hcf-quote">"O frio de -20°C não me assustou. Me fez crescer."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Como Funciona ── -->
+  <section class="section how-section" id="como-funciona">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Como funciona</span>
+        <h2>Da curiosidade ao <span class="text-gradient">embarque</span></h2>
+        <p>Aprenda, planeje e tire dúvidas com a ajuda de quem já passou pela experiência</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="card step-card observe-fade">
+          <div class="step-number">1</div>
+          <div class="step-icon">🔍</div>
+          <h3 class="step-title">Explore e se inspire</h3>
+          <p class="step-desc">Leia relatos de egressos, explore destinos recomendados e descubra como funciona a vida
+            no exterior.</p>
+        </div>
+        <div class="card step-card observe-fade">
+          <div class="step-number">2</div>
+          <div class="step-icon">❓</div>
+          <h3 class="step-title">Tire suas dúvidas</h3>
+          <p class="step-desc">Pergunte diretamente para quem já foi. O fórum conecta estudantes interessados com
+            egressos experientes.</p>
+        </div>
+        <div class="card step-card observe-fade">
+          <div class="step-number">3</div>
+          <div class="step-icon">📝</div>
+          <h3 class="step-title">Prepare-se e decole</h3>
+          <p class="step-desc">Com a bagagem de dicas e mentorias da comunidade, sinta-se muito mais preparado para
+            prestar editais e processos de bolsas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ── CTA ── -->
+  <section class="section cta-section" id="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-icon">🚀</div>
+        <h2 class="cta-title">Pronto para <span class="text-gradient">mudar sua vida?</span></h2>
+        <p class="cta-desc">Crie sua conta, conecte-se com egressos e dê o primeiro passo para o intercâmbio dos seus
+          sonhos — de graça.</p>
+        <div class="flex justify-center gap-4" style="flex-wrap:wrap">
+          <a href="cadastro.html" class="btn btn-primary btn-lg" id="btnCtaCadastro">Criar conta gratuita</a>
+          <a href="forum.html" class="btn btn-secondary btn-lg" id="btnCtaForum">Acessar o Fórum</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" style="margin-bottom:var(--space-4);display:inline-flex">
+            <div class="nav-logo-icon">🌍</div>
+            <span class="nav-logo-text">Conceta<span>Mundo</span></span>
+          </a>
+          <p>Plataforma colaborativa para conectar estudantes de ensino médio a egressos de intercâmbio, facilitando a
+            troca de dicas, histórias e mentoria.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Explorar</h5>
+          <ul>
+            <li><a href="relatos.html">Relatos</a></li>
+            <li><a href="forum.html">Fórum</a></li>
+            <li><a href="explorar.html">Destinos</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Conta</h5>
+          <ul>
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Cadastrar</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Programa</h5>
+          <ul>
+            <li><a href="#como-funciona">Como funciona</a></li>
+            <li><a href="#destinos">Destinos</a></li>
+            <li><a href="forum.html">Tire suas dúvidas</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Conceta Mundo · Conectando Experiências e Estudantes</p>
+        <p>Feito com ❤️ para transformar vidas</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Modal de Relatos Interativo ── -->
+  <div id="storiesModal" class="reports-modal" style="display: none;">
+    <div class="reports-modal-content">
+      <button class="reports-modal-close" onclick="StoriesModal.close()">&times;</button>
+      
+      <!-- Painel Esquerdo: Lista de Relatos -->
+      <div class="reports-modal-list-pane">
+        <div class="reports-search-box">
+          <input type="text" id="reportsSearch" class="form-input" placeholder="🔍 Pesquisar relatos..." oninput="StoriesModal.filterStories()">
+        </div>
+        <div class="reports-mini-list" id="reportsMiniList">
+          <!-- Gerado dinamicamente -->
+        </div>
+      </div>
+      
+      <!-- Painel Direito: Detalhes do Relato -->
+      <div class="reports-modal-detail-pane" id="reportsDetailPane">
+        <!-- Gerado dinamicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+
+    // ── Lógica do Modal de Relatos Interativo ──
+    const StoriesModal = {
+      modal: null,
+      searchVal: '',
+      activeStoryId: null,
+      
+      init() {
+        this.modal = document.getElementById('storiesModal');
+        // Fecha ao clicar fora da área de conteúdo
+        this.modal.addEventListener('click', (e) => {
+          if (e.target === this.modal) {
+            this.close();
+          }
+        });
+      },
+      
+      open(storyId = null) {
+        if (!this.modal) this.init();
+        this.modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Evita rolagem da página por baixo
+        
+        const stories = DB.Stories.getAll();
+        if (stories.length === 0) return;
+        
+        // Seleciona o relato solicitado ou o primeiro da lista
+        this.activeStoryId = storyId || stories[0].id;
+        
+        // Incrementa visualizações
+        DB.Stories.incrementViews(this.activeStoryId);
+        
+        // Limpa busca anterior
+        const searchInput = document.getElementById('reportsSearch');
+        if (searchInput) {
+          searchInput.value = '';
+          this.searchVal = '';
+        }
+        
+        this.renderList();
+        this.renderDetail();
+      },
+      
+      close() {
+        if (this.modal) {
+          this.modal.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+      },
+      
+      filterStories() {
+        this.searchVal = document.getElementById('reportsSearch').value.toLowerCase();
+        this.renderList();
+      },
+      
+      renderList() {
+        const listEl = document.getElementById('reportsMiniList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        
+        const stories = DB.Stories.getAll().filter(s => {
+          return s.titulo.toLowerCase().includes(this.searchVal) || 
+                 s.resumo.toLowerCase().includes(this.searchVal) || 
+                 s.pais.toLowerCase().includes(this.searchVal);
+        });
+        
+        if (stories.length === 0) {
+          listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);font-size:0.85rem">Nenhum relato encontrado.</div>';
+          return;
+        }
+        
+        stories.forEach(s => {
+          const isActive = s.id === this.activeStoryId;
+          const div = document.createElement('div');
+          div.className = `reports-mini-card ${isActive ? 'active' : ''}`;
+          div.onclick = () => {
+            this.selectStory(s.id);
+          };
+          
+          const flag = { 'Irlanda': '🇮🇪', 'Canadá': '🇨🇦', 'Portugal': '🇵🇹', 'Alemanha': '🇩🇪', 'França': '🇫🇷', 'Espanha': '🇪🇸' }[s.pais] || '🌍';
+          
+          div.innerHTML = `
+            <div class="reports-mini-title">${flag} ${s.titulo}</div>
+            <div class="reports-mini-meta">
+              <span>${s.cidade} (${s.ano})</span>
+              <span>👁 ${s.visualizacoes}</span>
+            </div>
+          `;
+          listEl.appendChild(div);
+        });
+      },
+      
+      selectStory(id) {
+        this.activeStoryId = id;
+        DB.Stories.incrementViews(id);
+        this.renderList();
+        this.renderDetail();
+        
+        // Atualiza os contadores na página inicial se a grid estiver montada
+        const mainGrid = document.getElementById('storiesPreviewGrid');
+        if (mainGrid) {
+          mainGrid.innerHTML = '';
+          DB.Stories.getDestaques().forEach(story => {
+            mainGrid.innerHTML += UI.renderStoryCard(story);
+          });
+        }
+      },
+      
+      renderDetail() {
+        const detailEl = document.getElementById('reportsDetailPane');
+        if (!detailEl) return;
+        
+        const story = DB.Stories.getById(this.activeStoryId);
+        if (!story) {
+          detailEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400)">Selecione um relato para ver os detalhes.</div>';
+          return;
+        }
+        
+        const autor = UI.getUserById(story.autorId);
+        const user = Auth.getCurrentUser();
+        const isLiked = user ? story.curtidas.includes(user.id) : false;
+        const flags = { 'Irlanda': '🇮🇪', 'Canadá': '🇨🇦', 'Portugal': '🇵🇹', 'Alemanha': '🇩🇪', 'França': '🇫🇷', 'Espanha': '🇪🇸' };
+        const flag = flags[story.pais] || '🌍';
+        
+        let commentsHtml = '';
+        if (story.comentarios.length === 0) {
+          commentsHtml = '<div class="no-comments" style="font-size:0.85rem;color:var(--gray-500);text-align:center;padding:12px;">Nenhum comentário ainda. Seja o primeiro a comentar!</div>';
+        } else {
+          story.comentarios.forEach(c => {
+            const commentAuthor = UI.getUserById(c.autorId);
+            commentsHtml += `
+              <div class="comment-item">
+                <div class="comment-header">
+                  <div class="flex items-center gap-2">
+                    ${UI.renderAvatar(commentAuthor, 'sm')}
+                    <span class="comment-author">${commentAuthor ? commentAuthor.nome : 'Usuário'}</span>
+                  </div>
+                  <span class="comment-date">${UI.timeAgo(c.data)}</span>
+                </div>
+                <p class="comment-text">${c.texto}</p>
+              </div>
+            `;
+          });
+        }
+        
+        detailEl.innerHTML = `
+          <div class="story-detail-header">
+            <div class="flex items-center gap-3">
+              <span style="font-size:2.5rem">${flag}</span>
+              <div>
+                <h2 style="font-size:1.6rem;line-height:1.2;margin:0">${story.titulo}</h2>
+                <p style="font-size:0.9rem;color:var(--teal-400);margin:4px 0 0 0">${story.cidade}, ${story.pais} · ${story.ano}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="story-detail-meta">
+            <div class="story-detail-meta-item">📅 <strong>Duração:</strong> ${story.duracao}</div>
+            <div class="story-detail-meta-item">🏛️ <strong>Programa:</strong> ${story.programa}</div>
+            <div class="story-detail-meta-item">👁 ${story.visualizacoes} visualizações</div>
+          </div>
+          
+          <div class="flex items-center gap-3" style="border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:16px;margin-top:8px;">
+            ${UI.renderAvatar(autor, 'md')}
+            <div>
+              <div style="font-weight:700;color:var(--white)">${autor ? autor.nome : 'Egresso'}</div>
+              <div style="font-size:0.8rem;color:var(--gray-400)">Ex-intercambista Conceta Mundo</div>
+            </div>
+          </div>
+          
+          <div class="story-detail-body">
+            ${UI.markdownToHtml(story.conteudo)}
+          </div>
+          
+          <div class="story-detail-actions">
+            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="StoriesModal.toggleLike('${story.id}')">
+              ❤️ <span id="likeCount">${story.curtidas.length}</span> Curtidas
+            </button>
+          </div>
+          
+          <div class="story-detail-comments-sec">
+            <h3 style="font-size:1.15rem;margin:0 0 12px 0; border: none; padding-left: 0;">Comentários (${story.comentarios.length})</h3>
+            <div class="comments-list" id="commentsList">
+              ${commentsHtml}
+            </div>
+            
+            <div class="comment-form">
+              <textarea id="newCommentText" class="form-textarea" placeholder="${user ? 'Escreva um comentário...' : 'Faça login no topo da página para comentar...'}" ${user ? '' : 'disabled'}></textarea>
+              <button class="btn btn-primary" onclick="StoriesModal.submitComment('${story.id}')" ${user ? '' : 'disabled'} style="align-self: flex-end; padding: 8px 20px; font-size: 0.85rem; margin-top: 8px;">
+                Enviar
+              </button>
+            </div>
+          </div>
+        `;
+      },
+      
+      toggleLike(id) {
+        const user = Auth.getCurrentUser();
+        if (!user) {
+          Toast.error('Você precisa estar logado para curtir relatos!');
+          return;
+        }
+        
+        const updatedStory = DB.Stories.toggleCurtida(id, user.id);
+        if (updatedStory) {
+          this.renderDetail();
+          
+          // Atualiza a grid principal
+          const mainGrid = document.getElementById('storiesPreviewGrid');
+          if (mainGrid) {
+            mainGrid.innerHTML = '';
+            DB.Stories.getDestaques().forEach(story => {
+              mainGrid.innerHTML += UI.renderStoryCard(story);
+            });
+          }
+        }
+      },
+      
+      submitComment(id) {
+        const user = Auth.getCurrentUser();
+        if (!user) {
+          Toast.error('Você precisa estar logado para comentar!');
+          return;
+        }
+        
+        const textarea = document.getElementById('newCommentText');
+        if (!textarea) return;
+        const text = textarea.value.trim();
+        if (!text) return;
+        
+        const comment = DB.Stories.addComentario(id, user.id, text);
+        if (comment) {
+          textarea.value = '';
+          this.renderDetail();
+          Toast.success('Comentário enviado com sucesso!');
+          
+          // Atualiza a grid principal
+          const mainGrid = document.getElementById('storiesPreviewGrid');
+          if (mainGrid) {
+            mainGrid.innerHTML = '';
+            DB.Stories.getDestaques().forEach(story => {
+              mainGrid.innerHTML += UI.renderStoryCard(story);
+            });
+          }
+        }
+      }
+    };
+
+    // Vincula cliques aos botões da página inicial
+    document.addEventListener('DOMContentLoaded', () => {
+      const heroBtn = document.getElementById('btnHeroRelatos');
+      if (heroBtn) {
+        heroBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          StoriesModal.open();
+        });
+      }
+
+
+    });
+  </script>
+</body>
+
+</html>
